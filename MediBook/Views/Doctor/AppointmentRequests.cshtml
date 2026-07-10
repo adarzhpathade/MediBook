@@ -1,0 +1,81 @@
+@model IEnumerable<MediBook.Models.DTOs.AppointmentDto>
+
+@{
+    ViewData["Title"] = "Appointment Requests";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <h1 class="display-6 fw-bold text-dark mb-2">Appointment Requests</h1>
+    <p class="fs-5 text-muted mb-0">Manage pending requests from your patients.</p>
+</div>
+
+<div class="bg-white rounded-4 p-4 shadow-sm border-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <h3 class="fs-5 fw-bold text-dark m-0">Pending Requests</h3>
+            @if (Model != null && Model.Any())
+            {
+                <span class="badge rounded-pill fw-bold" style="background-color: rgba(246, 211, 94, 0.3); color: var(--mb-primary); padding: 4px 12px;">@Model.Count()</span>
+            }
+        </div>
+    </div>
+    
+    @if (Model != null && Model.Any())
+    {
+        <div class="d-flex flex-column gap-3">
+            @foreach (var request in Model)
+            {
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center p-4 rounded-4" style="border: 1px solid var(--mb-divider);">
+                    <div class="d-flex gap-4 align-items-center mb-3 mb-md-0">
+                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center fw-bold fs-4" style="width: 56px; height: 56px; background-color: rgba(191, 212, 255, 0.4); color: var(--mb-primary);">
+                            @(string.IsNullOrEmpty(request.PatientName) ? "P" : request.PatientName.Substring(0, 1).ToUpper())
+                        </div>
+                        <div>
+                            <div class="fs-5 fw-bold text-dark mb-1">@request.PatientName</div>
+                            <div class="d-flex gap-3 small text-muted fw-bold">
+                                <div class="d-flex align-items-center gap-1">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+                                    @request.AppointmentDate.ToString("MMM dd, yyyy")
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">schedule</span>
+                                    @request.AppointmentTime.ToString(@"hh\:mm")
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(request.Reason))
+                            {
+                                <div class="small text-muted mt-2">
+                                    <span class="fw-bold">Reason:</span> @request.Reason
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <form asp-action="AcceptAppointment" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="appointmentId" value="@request.AppointmentId" />
+                            <button type="submit" class="btn btn-dark rounded-pill fw-bold px-4">Accept</button>
+                        </form>
+                        <form asp-action="DeclineAppointment" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="appointmentId" value="@request.AppointmentId" />
+                            <button type="submit" class="btn btn-outline-dark rounded-pill fw-bold px-4">Decline</button>
+                        </form>
+                        <a asp-action="RescheduleAppointment" asp-route-id="@request.AppointmentId" class="btn btn-light rounded-pill fw-bold px-4" style="background-color: var(--mb-surface-sec);">Reschedule</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 80px; height: 80px; background-color: rgba(168, 198, 125, 0.2); color: var(--mb-accent-green);">
+                <span class="material-symbols-outlined fs-1">check_circle</span>
+            </div>
+            <h4 class="fw-bold text-dark mb-2">All caught up!</h4>
+            <p class="text-muted mb-0">You have no pending appointment requests.</p>
+        </div>
+    }
+</div>

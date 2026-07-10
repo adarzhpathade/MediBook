@@ -1,0 +1,113 @@
+@model MediBook.Models.DTOs.AppointmentDto
+@{
+    ViewData["Title"] = "Appointment Details";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <a asp-action="ManageAppointments" class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center text-dark" style="width: 40px; height: 40px;">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1 class="display-5 fw-bold text-dark m-0">Appointment Details</h1>
+    </div>
+    <p class="text-muted mb-0 ms-5 ps-2">View complete details of this appointment.</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-4 mb-4">
+                <div>
+                    <div class="text-muted small text-uppercase fw-bold mb-1">Appointment ID</div>
+                    <div class="fs-4 fw-bold">#@Model.AppointmentId</div>
+                </div>
+                <div>
+                    @{
+                        var badgeClass = Model.Status switch
+                        {
+                            "Confirmed" => "bg-success bg-opacity-10 text-success border border-success border-opacity-25",
+                            "Pending" => "bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25",
+                            "Cancelled" => "bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25",
+                            "Completed" => "bg-info bg-opacity-10 text-info border border-info border-opacity-25",
+                            _ => "bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25"
+                        };
+                    }
+                    <span class="badge rounded-pill fw-bold fs-6 @badgeClass" style="padding: 10px 20px;">@Model.Status</span>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-sm-6">
+                    <div class="p-4 rounded-4" style="background-color: var(--mb-surface-sec);">
+                        <div class="text-muted small fw-bold mb-2 d-flex align-items-center gap-2">
+                            <span class="material-symbols-outlined fs-5">event</span> Date
+                        </div>
+                        <div class="fs-5 fw-bold text-dark">@Model.AppointmentDate.ToString("MMMM dd, yyyy")</div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="p-4 rounded-4" style="background-color: var(--mb-surface-sec);">
+                        <div class="text-muted small fw-bold mb-2 d-flex align-items-center gap-2">
+                            <span class="material-symbols-outlined fs-5">schedule</span> Time
+                        </div>
+                        <div class="fs-5 fw-bold text-dark">@DateTime.Today.Add(Model.AppointmentTime).ToString("hh:mm tt")</div>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="fw-bold mb-3">Reason for Visit</h5>
+            <div class="p-4 rounded-4 border bg-light mb-0">
+                @if (!string.IsNullOrEmpty(Model.Reason))
+                {
+                    <p class="mb-0 text-dark">@Model.Reason</p>
+                }
+                else
+                {
+                    <p class="mb-0 text-muted fst-italic">No reason provided.</p>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Patient Details -->
+        <div class="bg-white rounded-4 shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-4 d-flex align-items-center gap-2 border-bottom pb-3">
+                <span class="material-symbols-outlined text-primary">person</span> Patient Info
+            </h5>
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center fw-bold fs-4" style="width: 60px; height: 60px; background-color: rgba(168, 198, 125, 0.4); color: var(--mb-primary);">
+                    @(string.IsNullOrEmpty(Model.PatientName) ? "P" : Model.PatientName.Substring(0, 1).ToUpper())
+                </div>
+                <div>
+                    <div class="fw-bold text-dark fs-5">@Model.PatientName</div>
+                    <div class="text-muted small">Patient ID: @Model.PatientId</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Details -->
+        <div class="bg-white rounded-4 shadow-sm p-4">
+            <h5 class="fw-bold mb-4 d-flex align-items-center gap-2 border-bottom pb-3">
+                <span class="material-symbols-outlined text-primary">stethoscope</span> Doctor Info
+            </h5>
+            <div class="d-flex align-items-center gap-3">
+                @if (!string.IsNullOrEmpty(Model.DoctorProfileImage))
+                {
+                    <img src="@Model.DoctorProfileImage" alt="@Model.DoctorName" class="rounded-circle object-fit-cover" style="width: 60px; height: 60px;" />
+                }
+                else
+                {
+                    <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center fw-bold fs-4" style="width: 60px; height: 60px; background-color: rgba(246, 211, 94, 0.4); color: var(--mb-primary);">
+                        @(string.IsNullOrEmpty(Model.DoctorName) ? "D" : Model.DoctorName.Substring(0, 1).ToUpper())
+                    </div>
+                }
+                <div>
+                    <div class="fw-bold text-dark fs-5">@Model.DoctorName</div>
+                    <div class="text-muted small">@Model.DoctorSpecialization</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

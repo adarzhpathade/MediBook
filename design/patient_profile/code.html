@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MediBook - Patient Profile</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#653853",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "on-surface": "#1c1b1b",
+                        "outline": "#747878",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#e5e2e1",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#f1edec",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f7f3f2",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "inverse-on-surface": "#f4f0ef",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#5f5e5e",
+                        "on-background": "#1c1b1b",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#e6e1df",
+                        "inverse-primary": "#c8c6c5",
+                        "surface-bright": "#fdf8f8",
+                        "surface-variant": "#e5e2e1",
+                        "on-primary-container": "#858383",
+                        "surface": "#fdf8f8",
+                        "primary-container": "#1c1b1b",
+                        "tertiary": "#000000",
+                        "on-surface-variant": "#444748",
+                        "tertiary-container": "#1d1b1a",
+                        "on-tertiary-container": "#868381",
+                        "inverse-surface": "#313030",
+                        "tertiary-fixed-dim": "#cac6c3",
+                        "on-secondary-fixed": "#330d26",
+                        "secondary-fixed": "#ffd8eb",
+                        "secondary": "#804f6c",
+                        "primary": "#000000",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#ddd9d8",
+                        "secondary-container": "#fec0e1",
+                        "on-primary-fixed-variant": "#474646",
+                        "background": "#fdf8f8",
+                        "on-secondary-container": "#7b4b67",
+                        "surface-container-highest": "#e5e2e1",
+                        "outline-variant": "#c4c7c7",
+                        "surface-container-high": "#ebe7e6",
+                        "secondary-fixed-dim": "#f2b5d6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "4xl": "2rem"
+                    },
+                    "spacing": {
+                        "section-margin": "64px",
+                        "unit": "8px",
+                        "container-padding": "40px",
+                        "sidebar-width": "280px",
+                        "card-gap": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Manrope"],
+                        "display-lg": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "body-md": ["Manrope"],
+                        "body-lg": ["Manrope"],
+                        "label-sm": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "headline-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    },
+                    "boxShadow": {
+                        "soft": "0 40px 60px -15px rgba(0,0,0,0.03)",
+                        "inner-soft": "inset 0 2px 4px 0 rgba(0,0,0,0.02)"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F9F5EE; /* Level 0: Warm Cream */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e2e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c8c6c5;
+        }
+
+        /* Base input styling to match system */
+        input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="date"], select {
+            background-color: #F9F5EE;
+            border: none;
+            border-radius: 9999px; /* Pill shape */
+            padding: 12px 24px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 16px;
+            color: #1c1b1b;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #1c1b1b;
+            background-color: #ffffff;
+        }
+        
+        /* Toggle Switch Styling */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #1c1b1b;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #1c1b1b;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e5e2e1;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 44px;
+            height: 24px;
+            background-color: #e5e2e1;
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+        .toggle-dot {
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface overflow-x-hidden min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col bg-primary-container dark:bg-tertiary-container text-on-primary-fixed dark:text-primary-fixed-dim fixed left-0 top-0 h-full w-sidebar-width rounded-r-[32px] shadow-soft z-50 py-8 gap-6">
+<!-- Brand / Header -->
+<div class="px-6 mb-8 flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline-md">M</div>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-on-primary dark:text-primary-fixed-dim">MediBook</h1>
+<p class="text-label-sm font-label-sm text-on-primary/70">Vital Luminescence</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-4 px-6 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/20 hover:scale-[1.02] rounded-full mx-4 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-secondary-container dark:bg-on-secondary-fixed-variant text-on-secondary-container dark:text-secondary-fixed rounded-full mx-4 transition-all duration-300 scale-95" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md font-label-md">Patients</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/20 hover:scale-[1.02] rounded-full mx-4 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-md font-label-md">Schedule</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/20 hover:scale-[1.02] rounded-full mx-4 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="text-label-md font-label-md">My Appointments</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-primary-container dark:text-on-tertiary-container hover:bg-surface-variant/20 hover:scale-[1.02] rounded-full mx-4 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="px-6 mt-auto">
+<button class="w-full py-4 rounded-full bg-surface-container-lowest text-primary-container font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                New Appointment
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-0 md:ml-sidebar-width min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="w-full h-20 bg-transparent flex justify-between items-center px-4 md:px-container-padding py-6 sticky top-0 z-40 backdrop-blur-sm">
+<!-- Mobile Brand (Hidden on Desktop) -->
+<div class="md:hidden flex items-center gap-2">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary font-headline-md">M</div>
+<span class="text-headline-md font-headline-md font-bold text-primary">MediBook</span>
+</div>
+<!-- Search (On Left as per JSON) -->
+<div class="hidden md:flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-full shadow-sm w-96 border border-surface-variant/50">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="!bg-transparent !p-0 !text-sm !w-full focus:!ring-0 focus:!shadow-none" placeholder="Search patients, doctors, or settings..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shadow-sm relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined">chat_bubble</span>
+</button>
+<button class="hidden md:flex w-10 h-10 rounded-full bg-surface-container-lowest items-center justify-center text-on-surface-variant hover:text-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined">help</span>
+</button>
+<!-- Avatar -->
+<div class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden border-2 border-surface-container-lowest shadow-sm ml-2 cursor-pointer">
+<img alt="Eleanor Vance" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPk01aJWiEyu-AQRlb8GEW7YIKHao301DlxEuI94gTxK9fv70ggvYETyZdsryr0aCx_hetj8ZeGJ9h1BmAHg3XEFbgoaoA9DBIyG2KFE3axFmbkkzRRJ92I_iij2fXcAjREzO6G9j-SlIWcFCugaU2u-mrjXbNfOURJZzuFfAV_xssuz2F2mNrF0kdVjGmIK8cNv5ocV_xmZ1ZIYbydikxOk-EG0co4SIoivQ6CrpxE1KmbDQ1npOq"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="px-4 md:px-container-padding pb-section-margin w-full max-w-7xl mx-auto flex flex-col gap-card-gap">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-4">
+<div>
+<h2 class="text-display-lg font-display-lg text-primary tracking-tight">My Profile</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-2">Manage your personal information, medical details, and security settings.</p>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-6 py-3 rounded-full bg-surface-container-lowest text-on-surface border border-outline-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md">
+                        Cancel
+                    </button>
+<button class="flex-1 md:flex-none px-6 py-3 rounded-full bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary-fixed-variant transition-colors shadow-md">
+                        Save Changes
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-card-gap">
+<!-- 1. Profile Overview (Full Width, Span 12) -->
+<div class="col-span-1 md:col-span-12 bg-surface-container-lowest rounded-4xl p-8 shadow-soft flex flex-col lg:flex-row gap-8 items-center lg:items-start relative overflow-hidden">
+<!-- Decorative background element -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+<!-- Avatar Section -->
+<div class="flex flex-col items-center gap-4 z-10">
+<div class="relative">
+<div class="w-32 h-32 rounded-full border-4 border-[#F9F5EE] overflow-hidden shadow-sm">
+<img alt="Eleanor Vance" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFeLA7coD1ny4ZdkNHlchbZIW3ZAPNxM0c5qB35qJq8O7BudxDJwFtVi-ah0ZeexCaqqQd51sbuF2_nsY8C2D32lUxHVpP6bk1zdkWzlMpW9BE_hV2EL-rExPBigAf4AiIKBBfVJysOHWryn4JKXbkHacq7_kuZ1n363U1doI9ZzIXZ5Rv0dMVpJuQrbJ3dEYAPFRKUuHdUINSQxFe6aIx6zAXxJwFlFpM7k_JdP3yIlUDR36Upq2u"/>
+</div>
+<div class="absolute bottom-2 right-2 w-5 h-5 bg-green-500 border-2 border-surface-container-lowest rounded-full" title="Online"></div>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-full bg-primary-container text-on-primary text-label-sm font-label-sm hover:bg-primary-fixed-variant transition-colors">Upload</button>
+<button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm hover:bg-surface-variant transition-colors">Remove</button>
+</div>
+</div>
+<!-- Identity Info Section -->
+<div class="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left z-10 space-y-2">
+<div class="flex items-center gap-3">
+<h3 class="text-headline-lg font-headline-lg text-primary">Eleanor Vance</h3>
+<span class="px-3 py-1 bg-secondary-container/30 text-secondary font-label-sm text-label-sm rounded-full">Premium Patient</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center justify-center lg:justify-start gap-2">
+<span class="material-symbols-outlined text-[18px]">mail</span> eleanor.vance@example.com
+                        </p>
+<p class="text-body-md font-body-md text-on-surface-variant flex items-center justify-center lg:justify-start gap-2">
+<span class="material-symbols-outlined text-[18px]">phone</span> +1 (555) 123-4567
+                        </p>
+<div class="flex flex-wrap justify-center lg:justify-start gap-4 mt-4 pt-4 border-t border-surface-variant/50 w-full">
+<div>
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider">Patient ID</span>
+<span class="text-body-md font-body-md font-medium">MB-2023-8942</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider">DOB</span>
+<span class="text-body-md font-body-md font-medium">Oct 15, 1971 (52y)</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider">Gender</span>
+<span class="text-body-md font-body-md font-medium">Female</span>
+</div>
+</div>
+</div>
+<!-- KPI Cards Section -->
+<div class="w-full lg:w-auto grid grid-cols-2 gap-4 z-10">
+<div class="bg-[#F9F5EE] p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+<span class="text-display-lg font-display-lg text-primary leading-none">24</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1">Total Visits</span>
+</div>
+<div class="bg-secondary-container/20 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+<span class="text-display-lg font-display-lg text-secondary leading-none">3</span>
+<span class="text-label-sm font-label-sm text-secondary mt-1">Upcoming</span>
+</div>
+<div class="bg-surface-variant/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+<span class="text-display-lg font-display-lg text-primary leading-none">18</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1">Completed</span>
+</div>
+<div class="bg-surface-variant/30 p-4 rounded-2xl flex flex-col items-center justify-center text-center">
+<span class="text-display-lg font-display-lg text-primary leading-none">5</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1">Saved Doctors</span>
+</div>
+</div>
+</div>
+<!-- 2. Personal Information (Span 7) -->
+<div class="col-span-1 md:col-span-7 bg-surface-container-lowest rounded-4xl p-8 shadow-soft">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Personal Information</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">Full Name</label>
+<input type="text" value="Eleanor Vance"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">Email Address</label>
+<input type="email" value="eleanor.vance@example.com"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">Phone Number</label>
+<input type="tel" value="+1 (555) 123-4567"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">Date of Birth</label>
+<input type="date" value="1971-10-15"/>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">Address Line</label>
+<input type="text" value="1234 Serenity Lane, Apt 4B"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">City</label>
+<input type="text" value="San Francisco"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant ml-2">Postal Code</label>
+<input type="text" value="94107"/>
+</div>
+</div>
+</div>
+<!-- 3. Medical Information (Span 5) -->
+<div class="col-span-1 md:col-span-5 bg-secondary-container/10 rounded-4xl p-8 shadow-soft border border-secondary-fixed/50">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">medical_information</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Medical Snapshot</h3>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm">
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider mb-1">Blood Group</span>
+<span class="text-headline-md font-headline-md text-primary">O+</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm">
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider mb-1">Allergies</span>
+<span class="text-body-md font-body-md text-error font-medium">Penicillin</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm">
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider mb-1">Height</span>
+<span class="text-body-md font-body-md text-primary font-medium">5' 6"</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm">
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider mb-1">Weight</span>
+<span class="text-body-md font-body-md text-primary font-medium">145 lbs</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-lowest p-4 rounded-2xl shadow-sm">
+<span class="text-label-sm font-label-sm text-outline block uppercase tracking-wider mb-2">Chronic Conditions</span>
+<div class="flex gap-2 flex-wrap">
+<span class="px-3 py-1 bg-[#F9F5EE] text-on-surface rounded-full text-label-sm font-label-sm">Hypertension (Mild)</span>
+</div>
+</div>
+<div class="bg-error-container/30 p-4 rounded-2xl shadow-sm border border-error-container">
+<span class="text-label-sm font-label-sm text-on-error-container block uppercase tracking-wider mb-2">Emergency Contact</span>
+<p class="text-body-md font-body-md font-medium text-primary">Robert Vance (Husband)</p>
+<p class="text-body-md font-body-md text-on-surface-variant">+1 (555) 987-6543</p>
+</div>
+</div>
+</div>
+<!-- 4. Profile Completion & Settings Row -->
+<div class="col-span-1 md:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-card-gap">
+<!-- Completion Widget -->
+<div class="bg-surface-container-lowest rounded-4xl p-8 shadow-soft flex flex-col justify-center">
+<h3 class="text-headline-md font-headline-md text-primary mb-2">Profile Status</h3>
+<p class="text-body-md font-body-md text-on-surface-variant mb-6">Complete your profile to unlock premium booking features.</p>
+<div class="flex justify-between items-end mb-2">
+<span class="text-display-lg font-display-lg text-primary leading-none">92%</span>
+<span class="text-label-md font-label-md text-secondary">Excellent</span>
+</div>
+<div class="w-full bg-[#F9F5EE] rounded-full h-3 overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 92%"></div>
+</div>
+<button class="mt-6 text-label-md font-label-md text-primary underline underline-offset-4 decoration-outline-variant hover:decoration-primary transition-colors text-left w-fit">
+                            Add Missing Info (Insurance)
+                        </button>
+</div>
+<!-- Notification Preferences -->
+<div class="bg-surface-container-lowest rounded-4xl p-8 shadow-soft">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">notifications_active</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Notifications</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md font-medium text-primary">Appointment Reminders</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">SMS and Email 24h before</p>
+</div>
+<div class="relative inline-block w-11 mr-2 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle1" name="toggle1" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle1"></label>
+<div class="toggle-dot"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md font-medium text-primary">Doctor Messages</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Direct messages via portal</p>
+</div>
+<div class="relative inline-block w-11 mr-2 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle2" name="toggle2" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle2"></label>
+<div class="toggle-dot"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="text-body-md font-body-md font-medium text-primary">Marketing Updates</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Newsletters and offers</p>
+</div>
+<div class="relative inline-block w-11 mr-2 align-middle select-none">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="toggle3" name="toggle3" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="toggle3"></label>
+<div class="toggle-dot"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Security & Privacy -->
+<div class="bg-surface-container-lowest rounded-4xl p-8 shadow-soft">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">security</span>
+</div>
+<h3 class="text-headline-md font-headline-md text-primary">Security &amp; Privacy</h3>
+</div>
+<div class="space-y-4">
+<button class="w-full flex items-center justify-between p-4 rounded-2xl bg-[#F9F5EE] hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">password</span>
+<span class="text-body-md font-body-md font-medium">Change Password</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-2xl bg-[#F9F5EE] hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">phonelink_setup</span>
+<span class="text-body-md font-body-md font-medium">Two-Factor Auth (2FA)</span>
+</div>
+<span class="px-2 py-1 bg-secondary-container text-secondary text-[10px] font-bold rounded-md uppercase tracking-wide">Enabled</span>
+</button>
+<div class="pt-4 mt-4 border-t border-surface-variant/50">
+<button class="flex items-center gap-2 text-error font-label-md text-label-md hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">delete_forever</span>
+                                    Request Account Deletion
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

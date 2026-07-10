@@ -1,0 +1,71 @@
+@model MediBook.Models.DTOs.DoctorDto
+
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <h1 class="display-6 fw-bold text-dark mb-2">My Profile</h1>
+    <p class="fs-5 text-muted mb-0">Manage your professional information and consultation details.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0">
+            <div class="mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Edit Profile Information</h3>
+            </div>
+            
+
+
+            <form asp-action="UpdateProfile" method="post">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2">Full Name</label>
+                        <input type="text" class="form-control rounded-pill px-4 shadow-sm" style="border-color: var(--mb-divider); height: 52px; background-color: var(--mb-bg);" value="@Model.FullName" disabled>
+                        <small class="text-muted ms-2 mt-2 d-block">Name changes must be requested through admin.</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2">Email</label>
+                        <input type="email" class="form-control rounded-pill px-4 shadow-sm" style="border-color: var(--mb-divider); height: 52px; background-color: var(--mb-bg);" value="@Model.Email" disabled>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2">Specialization</label>
+                        <input type="text" class="form-control rounded-pill px-4 shadow-sm" style="border-color: var(--mb-divider); height: 52px;" name="specialization" value="@Model.Specialization" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2">Qualification</label>
+                        <input type="text" class="form-control rounded-pill px-4 shadow-sm" style="border-color: var(--mb-divider); height: 52px;" name="qualification" value="@Model.Qualification" required>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2">Experience (Years)</label>
+                        <input type="number" class="form-control rounded-pill px-4 shadow-sm" style="border-color: var(--mb-divider); height: 52px;" name="experience" value="@Model.Experience" min="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark mb-2">Consultation Fee (₹)</label>
+                        <div class="position-relative">
+                            <span class="position-absolute top-50 start-0 translate-middle-y ms-4 fw-bold text-muted">₹</span>
+                            <input type="number" class="form-control rounded-pill px-4 ps-5 shadow-sm" style="border-color: var(--mb-divider); height: 52px;" name="consultationFee" value="@Model.ConsultationFee" step="0.01" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label fw-bold text-dark mb-2">Biography</label>
+                    <textarea class="form-control rounded-4 p-4 shadow-sm" style="border-color: var(--mb-divider);" name="biography" rows="5">@Model.Biography</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-dark rounded-pill fw-bold px-5 py-2" style="height: 52px;">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

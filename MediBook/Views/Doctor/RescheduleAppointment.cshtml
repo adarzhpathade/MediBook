@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Reschedule Appointment";
+    Layout = "_AppLayout";
+    var appointmentId = ViewBag.AppointmentId;
+}
+
+<div class="mb-5 d-flex flex-column flex-lg-row justify-content-between align-items-stretch align-items-lg-end gap-4">
+    <div>
+        <h1 class="display-4 fw-bold text-dark mb-2">Reschedule Appointment</h1>
+        <p class="fs-5 text-muted mb-0">Select a new date and time for this patient.</p>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-lg-6">
+        <div class="bg-white rounded-4 p-4 p-md-5 shadow-sm border-0 position-relative overflow-hidden">
+            <!-- Subtle watermark icon -->
+            <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.03; pointer-events: none;">
+                <span class="material-symbols-outlined" style="font-size: 150px;">edit_calendar</span>
+            </div>
+
+            <div class="position-relative z-1">
+                <form asp-action="RescheduleAppointment" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="All" class="text-danger small fw-bold mb-4"></div>
+                    
+                    <input type="hidden" name="appointmentId" value="@appointmentId" />
+
+                    <div class="form-floating mb-4">
+                        <input type="date" class="form-control rounded-4 bg-light border-0 shadow-none px-4" id="newDate" name="newDate" required min="@DateTime.UtcNow.ToString("yyyy-MM-dd")" max="@DateTime.UtcNow.AddDays(5).ToString("yyyy-MM-dd")" placeholder="New Date">
+                        <label for="newDate" class="px-4 text-muted">New Date</label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="time" class="form-control rounded-4 bg-light border-0 shadow-none px-4" id="newTime" name="newTime" required placeholder="New Time">
+                        <label for="newTime" class="px-4 text-muted">New Time</label>
+                    </div>
+                    <div class="form-text mb-5 ms-2 small text-muted">
+                        <span class="material-symbols-outlined align-middle" style="font-size: 14px;">info</span>
+                        Please select a time within your standard availability.
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-3 mt-2">
+                        <button type="submit" class="btn btn-dark rounded-pill px-4 py-3 fw-bold d-flex align-items-center justify-content-center gap-2 flex-grow-1 shadow-sm">
+                            <span class="material-symbols-outlined fs-5">event_available</span>
+                            Confirm Reschedule
+                        </button>
+                        <a asp-action="AppointmentRequests" class="btn btn-light rounded-pill px-4 py-3 fw-bold d-flex align-items-center justify-content-center flex-grow-1 shadow-sm text-decoration-none" style="border: 1px solid var(--mb-divider);">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

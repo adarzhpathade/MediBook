@@ -1,0 +1,218 @@
+@model MediBook.Models.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_AppLayout";
+}
+
+<!-- Welcome Section -->
+<div class="mb-5 d-flex flex-column flex-lg-row justify-content-between align-items-stretch align-items-lg-end gap-4">
+    <div>
+        <h1 class="display-4 fw-bold text-dark mb-2">Platform Overview</h1>
+        <p class="fs-5 text-muted mb-0">Here's a comprehensive view of MediBook's platform statistics.</p>
+    </div>
+</div>
+
+<!-- Quick Stats Bento Grid (Top Row) -->
+<div class="row g-4 mb-4">
+    <!-- Stat 1: Total Users -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card blue shadow-sm" style="background-color: var(--mb-accent-blue);">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Total Users</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">public</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TotalUsers</div>
+            </div>
+            <div class="position-absolute bg-white rounded" style="width: 100px; height: 100px; right: -20px; top: -40px; transform: rotate(45deg); filter: blur(15px); opacity: 0.4;"></div>
+        </div>
+    </div>
+    <!-- Stat 2: Total Doctors -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card blue shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Total Doctors</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">stethoscope</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TotalDoctors</div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 3: Total Patients -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card green shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Total Patients</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">group</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TotalPatients</div>
+            </div>
+            <div class="position-absolute rounded-circle bg-black" style="width: 110px; height: 110px; left: -30px; bottom: -10px; filter: blur(20px); opacity: 0.05;"></div>
+        </div>
+    </div>
+    <!-- Stat 4: Total Appointments -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card pink shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Appointments</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">event_note</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TotalAppointments</div>
+            </div>
+            <div class="position-absolute rounded-circle bg-white" style="width: 120px; height: 120px; right: -30px; bottom: -30px; filter: blur(20px); opacity: 0.4;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Bento Grid (Bottom Row) -->
+<div class="row g-4 mb-5">
+    <!-- Stat 5: Pending Appointments -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card yellow shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Pending Requests</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">pending_actions</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.PendingAppointments</div>
+            </div>
+            <div class="position-absolute d-flex align-items-end gap-1" style="bottom: 1rem; right: 1rem; height: 3rem; opacity: 0.4;">
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 100%;"></div>
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 75%;"></div>
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 50%;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 6: Completed Appointments -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card green shadow-sm" style="background-color: var(--mb-accent-green);">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Completed</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">check_circle</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.CompletedAppointments</div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 7: Cancelled Appointments -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card bg-light shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-danger" style="opacity: 0.8">Cancelled</span>
+                <span class="material-symbols-outlined fs-2 text-danger" style="opacity: 0.4">cancel</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-danger">@Model.CancelledAppointments</div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 8: Today's Appointments -->
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="bento-card pink shadow-sm" style="background-color: #ffd8e4;">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Today's Visits</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">today</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TodayAppointments</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="row g-4">
+    <!-- Left Column: Recent Registrations -->
+    <div class="col-lg-6 d-flex flex-column gap-4">
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Recent Registrations</h3>
+            </div>
+            
+            @if (Model.RecentRegistrations.Any())
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var reg in Model.RecentRegistrations)
+                    {
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background-color: var(--mb-surface-sec);">
+                            <div class="d-flex gap-3 align-items-center">
+                                <div>
+                                    <div class="fw-bold text-dark">@reg.Name</div>
+                                    <div class="small text-muted d-flex align-items-center gap-1">
+                                        <span class="material-symbols-outlined" style="font-size: 14px;">mail</span>
+                                        @reg.Email
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge rounded-pill fw-bold" style="background-color: rgba(168, 198, 125, 0.3); color: var(--mb-primary); padding: 6px 12px;">
+                                    @reg.Role
+                                </span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 250px;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 70px; height: 70px; background-color: rgba(191, 212, 255, 0.2); color: var(--mb-accent-blue);">
+                        <span class="material-symbols-outlined fs-2">person_add_disabled</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">No recent registrations</h5>
+                    <p class="text-muted small mb-0">New users will appear here once they register.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Right Column: Recent Appointments -->
+    <div class="col-lg-6 d-flex flex-column gap-4">
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Recent Appointments</h3>
+            </div>
+            
+            @if (Model.RecentAppointments.Any())
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var appt in Model.RecentAppointments)
+                    {
+                        <div class="p-3 rounded-4" style="border: 1px solid var(--mb-divider);">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="fw-bold text-dark">@appt.PatientName</div>
+                                <div>
+                                    <span class="badge rounded-pill fw-bold" style="background-color: rgba(246, 211, 94, 0.3); color: var(--mb-primary); padding: 6px 12px;">
+                                        @appt.Status
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="small text-muted mb-2 d-flex align-items-center gap-1">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">stethoscope</span>
+                                @appt.DoctorName
+                            </div>
+                            <div class="small text-muted d-flex align-items-center gap-1">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                @appt.AppointmentDate.ToString("MMM dd, yyyy") at @appt.AppointmentTime.ToString(@"hh\:mm")
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 250px;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 70px; height: 70px; background-color: rgba(255, 216, 228, 0.5); color: var(--mb-accent-pink);">
+                        <span class="material-symbols-outlined fs-2">event_note</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">No recent appointments</h5>
+                    <p class="text-muted small mb-0">The latest bookings across the platform will show up here.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

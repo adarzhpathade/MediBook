@@ -1,0 +1,114 @@
+@model MediBook.Models.ViewModels.SettingsViewModel
+
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <h2 class="display-5 fw-bold text-dark mb-2">Settings</h2>
+    <p class="fs-5 text-muted mb-0">
+        Manage your personal information and account security.
+    </p>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+        @Model.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4" role="alert">
+        @Model.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row g-4">
+    <!-- Profile Form -->
+    <div class="col-lg-6">
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0 h-100">
+            <h3 class="fs-5 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+                <span class="material-symbols-outlined fs-4">person</span> Personal Information
+            </h3>
+            
+            <form asp-action="UpdateProfile" method="post">
+                <input type="hidden" asp-for="Profile.PatientId" />
+                <div class="d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">Full Name</label>
+                        <input type="text" asp-for="Profile.FullName" class="form-control rounded-pill px-4 py-3 bg-light border-0" required>
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">Email Address</label>
+                        <input type="email" asp-for="Profile.Email" class="form-control rounded-pill px-4 py-3 bg-light border-0" style="opacity: 0.7; cursor: not-allowed;" readonly>
+                        <p class="small text-muted mt-1 m-0">Email cannot be changed.</p>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label class="form-label fw-bold text-dark mb-2">Phone</label>
+                            <input type="tel" asp-for="Profile.Phone" class="form-control rounded-pill px-4 py-3 bg-light border-0">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label fw-bold text-dark mb-2">Gender</label>
+                            <select asp-for="Profile.Gender" class="form-select rounded-pill px-4 py-3 bg-light border-0">
+                                <option value="">Select...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">Date of Birth</label>
+                        <input type="date" asp-for="Profile.DateOfBirth" class="form-control rounded-pill px-4 py-3 bg-light border-0">
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">Address</label>
+                        <textarea asp-for="Profile.Address" class="form-control rounded-4 px-4 py-3 bg-light border-0 resize-none" rows="2" style="resize: none;"></textarea>
+                    </div>
+                    <div class="pt-4 mt-3 border-top">
+                        <button type="submit" class="btn btn-dark rounded-pill fw-bold px-4 py-2 shadow-sm">
+                            Save Profile
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Form -->
+    <div class="col-lg-6">
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0">
+            <h3 class="fs-5 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+                <span class="material-symbols-outlined fs-4">lock</span> Change Password
+            </h3>
+            
+            <form asp-action="ChangePassword" method="post">
+                <div class="d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">Current Password</label>
+                        <input type="password" asp-for="CurrentPassword" class="form-control rounded-pill px-4 py-3 bg-light border-0">
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">New Password</label>
+                        <input type="password" asp-for="NewPassword" class="form-control rounded-pill px-4 py-3 bg-light border-0">
+                    </div>
+                    <div>
+                        <label class="form-label fw-bold text-dark mb-2">Confirm New Password</label>
+                        <input type="password" asp-for="ConfirmNewPassword" class="form-control rounded-pill px-4 py-3 bg-light border-0">
+                        <span asp-validation-for="ConfirmNewPassword" class="text-danger small d-block mt-1"></span>
+                    </div>
+                    <div class="pt-4 mt-3 border-top">
+                        <button type="submit" class="btn btn-light rounded-pill fw-bold px-4 py-2 shadow-sm" style="background-color: var(--mb-surface-sec);">
+                            Update Password
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

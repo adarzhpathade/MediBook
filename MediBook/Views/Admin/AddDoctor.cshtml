@@ -1,0 +1,96 @@
+@model MediBook.Models.ViewModels.AddDoctorViewModel
+@{
+    ViewData["Title"] = "Add Doctor";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <a asp-action="ManageDoctors" class="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center text-dark" style="width: 40px; height: 40px;">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1 class="display-5 fw-bold text-dark m-0">Add Doctor</h1>
+    </div>
+    <p class="text-muted mb-0 ms-5 ps-2">Register a new doctor account on the platform.</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+            <form asp-action="AddDoctor" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3 fw-bold"></div>
+
+                <div class="row g-4 mb-4">
+                    <!-- Basic Info -->
+                    <div class="col-12">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">person</span> Account Information
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                                <input asp-for="FullName" class="form-control rounded-3 p-3 bg-light border-0" placeholder="e.g. Dr. John Doe" />
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-bold">Email Address</label>
+                                <input asp-for="Email" type="email" class="form-control rounded-3 p-3 bg-light border-0" placeholder="doctor@medibook.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Password" class="form-label fw-bold">Initial Password</label>
+                                <input asp-for="Password" type="password" class="form-control rounded-3 p-3 bg-light border-0" placeholder="••••••••" />
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="text-muted" />
+
+                    <!-- Professional Info -->
+                    <div class="col-12">
+                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">work</span> Professional Details
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Specialization" class="form-label fw-bold">Specialization</label>
+                                <input asp-for="Specialization" class="form-control rounded-3 p-3 bg-light border-0" placeholder="e.g. Cardiology" />
+                                <span asp-validation-for="Specialization" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Qualification" class="form-label fw-bold">Qualification</label>
+                                <input asp-for="Qualification" class="form-control rounded-3 p-3 bg-light border-0" placeholder="e.g. MD, MBBS" />
+                                <span asp-validation-for="Qualification" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Experience" class="form-label fw-bold">Experience (Years)</label>
+                                <input asp-for="Experience" type="number" class="form-control rounded-3 p-3 bg-light border-0" placeholder="e.g. 10" />
+                                <span asp-validation-for="Experience" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ConsultationFee" class="form-label fw-bold">Consultation Fee (₹)</label>
+                                <input asp-for="ConsultationFee" type="number" step="0.01" class="form-control rounded-3 p-3 bg-light border-0" placeholder="e.g. 150.00" />
+                                <span asp-validation-for="ConsultationFee" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Biography" class="form-label fw-bold">Biography (Optional)</label>
+                                <textarea asp-for="Biography" class="form-control rounded-3 p-3 bg-light border-0" rows="4" placeholder="Brief professional biography..."></textarea>
+                                <span asp-validation-for="Biography" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 mt-5">
+                    <a asp-action="ManageDoctors" class="btn btn-light rounded-pill px-4 fw-bold">Cancel</a>
+                    <button type="submit" class="btn btn-dark rounded-pill px-5 fw-bold">Create Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

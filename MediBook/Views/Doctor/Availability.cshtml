@@ -1,0 +1,97 @@
+@model IEnumerable<MediBook.Models.DTOs.DoctorAvailabilityDto>
+
+@{
+    ViewData["Title"] = "Availability Management";
+    Layout = "_AppLayout";
+    
+    // Group availability by day of week for easier rendering
+    var availabilityMap = Model?.ToDictionary(a => a.DayOfWeek) ?? new Dictionary<int, MediBook.Models.DTOs.DoctorAvailabilityDto>();
+    
+    var days = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+}
+
+<div class="mb-5">
+    <h1 class="display-6 fw-bold text-dark mb-2">Manage Availability</h1>
+    <p class="fs-5 text-muted mb-0">Configure your weekly schedule and appointment slots.</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-11 col-xl-10">
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0">
+            <div class="mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Weekly Schedule Configuration</h3>
+            </div>
+            
+
+
+            <form asp-action="UpdateAvailability" method="post">
+                
+                <div class="d-flex flex-column gap-3 mb-5">
+                    <!-- Headers (Hidden on small screens) -->
+                    <div class="d-none d-md-flex px-4 pb-2" style="border-bottom: 2px solid var(--mb-divider);">
+                        <div class="fw-bold text-muted" style="width: 20%;">Day</div>
+                        <div class="fw-bold text-muted text-center" style="width: 15%;">Available</div>
+                        <div class="fw-bold text-muted" style="width: 25%;">Start Time</div>
+                        <div class="fw-bold text-muted" style="width: 25%;">End Time</div>
+                        <div class="fw-bold text-muted" style="width: 15%;">Slot (min)</div>
+                    </div>
+
+                    @for (int i = 0; i < 7; i++)
+                    {
+                        var isAvailable = availabilityMap.ContainsKey(i);
+                        var avail = isAvailable ? availabilityMap[i] : null;
+                        var startTime = avail?.StartTime.ToString(@"hh\:mm") ?? "09:00";
+                        var endTime = avail?.EndTime.ToString(@"hh\:mm") ?? "17:00";
+                        var slotDuration = avail?.SlotDuration ?? 30;
+
+                        <div class="d-flex flex-column flex-md-row align-items-md-center p-3 p-md-4 rounded-4" style="background-color: @(isAvailable ? "rgba(191, 212, 255, 0.1)" : "var(--mb-surface-sec)"); border: 1px solid var(--mb-divider); transition: background-color 0.2s;">
+                            
+                            <!-- Day Name -->
+                            <div class="fw-bold fs-5 text-dark mb-3 mb-md-0" style="width: 20%;">
+                                @days[i]
+                            </div>
+                            
+                            <!-- Toggle -->
+                            <div class="d-flex align-items-center justify-content-md-center mb-3 mb-md-0" style="width: 15%;">
+                                <div class="form-check form-switch m-0 fs-4">
+                                    <input class="form-check-input shadow-sm" type="checkbox" name="Availability[@i].IsAvailable" value="true" @(isAvailable ? "checked" : "") style="cursor: pointer;">
+                                </div>
+                            </div>
+                            
+                            <!-- Start Time -->
+                            <div class="mb-3 mb-md-0 px-md-2" style="width: 25%;">
+                                <label class="d-md-none form-label small fw-bold text-muted">Start Time</label>
+                                <input type="time" class="form-control rounded-pill px-3 shadow-sm text-center" style="border-color: var(--mb-divider); height: 44px;" name="Availability[@i].StartTime" value="@startTime">
+                            </div>
+                            
+                            <!-- End Time -->
+                            <div class="mb-3 mb-md-0 px-md-2" style="width: 25%;">
+                                <label class="d-md-none form-label small fw-bold text-muted">End Time</label>
+                                <input type="time" class="form-control rounded-pill px-3 shadow-sm text-center" style="border-color: var(--mb-divider); height: 44px;" name="Availability[@i].EndTime" value="@endTime">
+                            </div>
+                            
+                            <!-- Slot Duration -->
+                            <div class="px-md-2" style="width: 15%;">
+                                <label class="d-md-none form-label small fw-bold text-muted">Slot Duration</label>
+                                <select class="form-select rounded-pill px-3 shadow-sm" style="border-color: var(--mb-divider); height: 44px;" name="Availability[@i].SlotDuration">
+                                    <option value="15" selected="@(slotDuration == 15)">15m</option>
+                                    <option value="20" selected="@(slotDuration == 20)">20m</option>
+                                    <option value="30" selected="@(slotDuration == 30)">30m</option>
+                                    <option value="45" selected="@(slotDuration == 45)">45m</option>
+                                    <option value="60" selected="@(slotDuration == 60)">60m</option>
+                                </select>
+                                <input type="hidden" name="Availability[@i].DayOfWeek" value="@i" />
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-dark rounded-pill fw-bold px-5 py-2" style="height: 52px;">
+                        Save Schedule
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,176 @@
+@model MediBook.Models.ViewModels.MyAppointmentsViewModel
+
+@{
+    ViewData["Title"] = "My Appointments";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <h2 class="display-5 fw-bold text-dark mb-2">My Appointments</h2>
+    <p class="fs-5 text-muted mb-0">
+        Manage your upcoming visits and view your consultation history.
+    </p>
+</div>
+
+
+
+<div class="row g-4">
+    <!-- Upcoming Appointments -->
+    <div class="col-lg-6 d-flex flex-column gap-4">
+        <h3 class="fs-4 fw-bold text-dark mb-0">Upcoming</h3>
+        
+        <div class="d-flex flex-column gap-3">
+            @if (!Model.UpcomingAppointments.Any())
+            {
+                <div class="text-center py-5 bg-white rounded-4 shadow-sm border-0 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 300px;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 80px; height: 80px; background-color: rgba(191, 212, 255, 0.2); color: var(--mb-accent-blue);">
+                        <span class="material-symbols-outlined fs-1">event_available</span>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">No upcoming appointments</h4>
+                    <p class="text-muted mb-4">You have no scheduled visits at the moment.</p>
+                    <a href="@Url.Action("FindDoctors", "Patient")" class="btn btn-dark rounded-pill px-4 py-2 fw-bold shadow-sm">
+                        Find a Doctor
+                    </a>
+                </div>
+            }
+            else
+            {
+                @foreach(var appt in Model.UpcomingAppointments)
+                {
+                    var (uBg, uText, uDot) = appt.Status switch
+                    {
+                        "Pending" => ("rgba(246, 211, 94, 0.2)", "var(--mb-primary)", "var(--mb-accent-yellow)"),
+                        "Confirmed" => ("rgba(168, 198, 125, 0.2)", "var(--mb-primary)", "var(--mb-accent-green)"),
+                        "Rescheduled" => ("rgba(191, 212, 255, 0.2)", "var(--mb-primary)", "var(--mb-accent-blue)"),
+                        _ => ("rgba(246, 211, 94, 0.2)", "var(--mb-primary)", "var(--mb-accent-yellow)")
+                    };
+                    <div class="bg-white rounded-4 p-4 shadow-sm border-0 fade-up" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow=''">
+                        <div class="d-flex justify-content-between align-items-start mb-3 pb-3 border-bottom">
+                            <div class="d-flex gap-3">
+                                <div class="rounded-circle d-flex flex-column align-items-center justify-content-center text-dark flex-shrink-0" style="width: 48px; height: 48px; background-color: @uBg;">
+                                    <span class="fw-bold fs-5 lh-1">@appt.AppointmentDate.ToString("dd")</span>
+                                    <span class="small fw-bold text-muted lh-1" style="font-size: 10px;">@appt.AppointmentDate.ToString("MMM")</span>
+                                </div>
+                                <div>
+                                    <h4 class="fw-bold text-dark m-0 mb-1 fs-5">@appt.DoctorName</h4>
+                                    <p class="small text-muted m-0">@appt.DoctorSpecialization</p>
+                                </div>
+                            </div>
+                            <span class="badge rounded-pill fw-bold d-inline-flex align-items-center gap-2" style="background-color: @uBg; color: @uText; padding: 6px 14px;">
+                                <span class="rounded-circle" style="width: 8px; height: 8px; background-color: @uDot;"></span>
+                                @appt.Status
+                            </span>
+                        </div>
+                        <div class="d-flex flex-column gap-2 mb-4">
+                            <div class="d-flex align-items-center gap-2 text-muted small fw-bold">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">schedule</span>
+                                <span>@DateTime.Today.Add(appt.AppointmentTime).ToString("hh:mm tt")</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 text-muted small fw-bold">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">local_hospital</span>
+                                <span>@appt.ClinicName</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 pt-3 border-top">
+                            @if (appt.Status == "Pending")
+                            {
+                                <span class="flex-grow-1 text-center small fw-bold text-muted py-2 d-flex align-items-center justify-content-center gap-1">
+                                    <span class="material-symbols-outlined" style="font-size: 16px;">hourglass_top</span>
+                                    Awaiting doctor approval
+                                </span>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-outline-dark flex-grow-1 rounded-pill fw-bold" data-bs-toggle="modal" data-bs-target="#cancelModal-@appt.AppointmentId">
+                                    Cancel
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Past Appointments -->
+    <div class="col-lg-6 d-flex flex-column gap-4">
+        <h3 class="fs-4 fw-bold text-dark mb-0">Past</h3>
+        
+        <div class="d-flex flex-column gap-3">
+            @if (!Model.PastAppointments.Any())
+            {
+                <div class="text-center py-5 bg-white rounded-4 shadow-sm border-0 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 300px; opacity: 0.8;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 80px; height: 80px; background-color: rgba(0, 0, 0, 0.05); color: var(--mb-primary);">
+                        <span class="material-symbols-outlined fs-1">history</span>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">No past appointments</h4>
+                    <p class="text-muted m-0">Your consultation history will appear here.</p>
+                </div>
+            }
+            else
+            {
+                @foreach(var appt in Model.PastAppointments)
+                {
+                    var (pBg, pText, pDot, pIcon) = appt.Status switch
+                    {
+                        "Completed" => ("rgba(168, 198, 125, 0.2)", "var(--mb-primary)", "var(--mb-accent-green)", "check_circle"),
+                        "Cancelled" => ("rgba(0, 0, 0, 0.05)", "var(--mb-primary)", "var(--mb-primary)", "block"),
+                        "Declined" => ("rgba(244, 183, 216, 0.2)", "var(--mb-primary)", "var(--mb-accent-pink)", "cancel"),
+                        _ => ("rgba(191, 212, 255, 0.2)", "var(--mb-primary)", "var(--mb-accent-blue)", "event")
+                    };
+                    <div class="bg-white rounded-4 p-4 shadow-sm border-0 fade-up" style="transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow=''">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background-color: @pBg; color: @pDot;">
+                                    <span class="material-symbols-outlined fs-4">@pIcon</span>
+                                </div>
+                                <div>
+                                    <h4 class="fw-bold text-dark m-0 mb-1 fs-5">@appt.DoctorName</h4>
+                                    <p class="small text-muted m-0 fw-bold">@appt.AppointmentDate.ToString("MMM dd, yyyy")</p>
+                                </div>
+                            </div>
+                            <span class="badge rounded-pill fw-bold d-inline-flex align-items-center gap-2" style="background-color: @pBg; color: @pText; padding: 6px 14px;">
+                                <span class="rounded-circle" style="width: 8px; height: 8px; background-color: @pDot;"></span>
+                                @appt.Status
+                            </span>
+                        </div>
+                        <p class="text-muted m-0 small fw-bold">
+                            <span class="material-symbols-outlined fs-6 align-middle me-1">notes</span>
+                            Reason: @(appt.Reason ?? "Not specified")
+                        </p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@if (Model.UpcomingAppointments != null && Model.UpcomingAppointments.Any())
+{
+    @foreach(var appt in Model.UpcomingAppointments)
+    {
+        <!-- Cancel Modal -->
+        <div class="modal fade" id="cancelModal-@appt.AppointmentId" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow">
+                    <div class="modal-body p-5 text-center">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px; background-color: rgba(255, 99, 112, 0.1); color: var(--mb-accent-pink);">
+                            <span class="material-symbols-outlined fs-1">event_busy</span>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-3">Cancel Appointment?</h4>
+                        <p class="text-muted mb-4">Are you sure you want to cancel your appointment with <strong>@appt.DoctorName</strong>? This action cannot be undone.</p>
+                        <div class="d-flex gap-3">
+                            <button type="button" class="btn btn-light w-50 rounded-pill fw-bold py-3" data-bs-dismiss="modal">Keep It</button>
+                            <form asp-action="CancelAppointment" method="post" class="w-50 m-0">
+                                <input type="hidden" name="appointmentId" value="@appt.AppointmentId" />
+                                <button type="submit" class="btn btn-dark w-100 rounded-pill fw-bold py-3" style="background-color: var(--mb-accent-pink); border-color: var(--mb-accent-pink);">
+                                    Yes, Cancel
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

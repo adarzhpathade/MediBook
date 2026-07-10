@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Book Appointment - MediBook</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24;
+        }
+        
+        .fill-icon {
+           font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e6e1df; 
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c8c6c5; 
+        }
+
+        body {
+            background-color: #fdf8f8; /* background from theme */
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#1d1b1a",
+                        "inverse-on-surface": "#f4f0ef",
+                        "tertiary-fixed-dim": "#cac6c3",
+                        "primary": "#000000",
+                        "secondary-container": "#fec0e1",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#ebe7e6",
+                        "on-background": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#1d1b1a",
+                        "tertiary-fixed": "#e6e1df",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-surface": "#1c1b1b",
+                        "inverse-primary": "#c8c6c5",
+                        "on-surface-variant": "#444748",
+                        "tertiary": "#000000",
+                        "background": "#fdf8f8",
+                        "on-primary": "#ffffff",
+                        "outline": "#747878",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-secondary-container": "#7b4b67",
+                        "surface-container-low": "#f7f3f2",
+                        "on-secondary-fixed-variant": "#653853",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-secondary-fixed": "#330d26",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#868381",
+                        "surface-container": "#f1edec",
+                        "secondary": "#804f6c",
+                        "secondary-fixed": "#ffd8eb",
+                        "on-primary-fixed-variant": "#474646",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-tint": "#5f5e5e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fdf8f8",
+                        "surface-variant": "#e5e2e1",
+                        "on-primary-container": "#858383",
+                        "surface": "#fdf8f8",
+                        "surface-dim": "#ddd9d8",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c4c7c7",
+                        "secondary-fixed-dim": "#f2b5d6",
+                        "primary-fixed": "#e5e2e1",
+                        "inverse-surface": "#313030",
+                        "primary-container": "#1c1b1b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "4xl": "32px"
+                    },
+                    "spacing": {
+                        "card-gap": "24px",
+                        "sidebar-width": "280px",
+                        "container-padding": "40px",
+                        "unit": "8px",
+                        "section-margin": "64px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Manrope", "sans-serif"],
+                        "label-md": ["Manrope", "sans-serif"],
+                        "label-sm": ["Manrope", "sans-serif"],
+                        "headline-md": ["Manrope", "sans-serif"],
+                        "headline-lg-mobile": ["Manrope", "sans-serif"],
+                        "body-lg": ["Manrope", "sans-serif"],
+                        "headline-lg": ["Manrope", "sans-serif"],
+                        "display-lg": ["Manrope", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- JSON: SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[280px] rounded-r-[32px] overflow-hidden bg-primary-container dark:bg-tertiary-container shadow-xl z-50 hidden md:block">
+<div class="flex flex-col h-full py-10 px-4">
+<div class="mb-12 px-6">
+<h1 class="font-display-lg text-display-lg font-bold text-on-primary-fixed dark:text-on-tertiary-fixed">MediBook</h1>
+<p class="font-body-md text-body-md text-on-primary-container dark:text-on-tertiary-container opacity-70 mt-1">Premium Healthcare</p>
+</div>
+<button class="mb-8 mx-4 bg-secondary-container text-on-secondary-container rounded-full py-4 px-6 font-label-md text-label-md flex items-center justify-center gap-2 hover:bg-surface-variant/10 transition-colors shadow-sm">
+<span class="material-symbols-outlined">add_circle</span>
+                New Consultation
+            </button>
+<ul class="flex-1 space-y-2">
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 dark:hover:bg-surface-variant/5 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 dark:hover:bg-surface-variant/5 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">group</span>
+                        Patients
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 dark:hover:bg-surface-variant/5 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                        Schedule
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 dark:hover:bg-surface-variant/5 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">search</span>
+                        Find Doctors
+                    </a>
+</li>
+<li>
+<!-- Active State -->
+<a class="flex items-center gap-3 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-6 py-3 transition-all duration-300 scale-[0.98] font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined fill-icon">add_circle</span>
+                        Book Appointment
+                    </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 dark:hover:bg-surface-variant/5 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">event_note</span>
+                        My Appointments
+                    </a>
+</li>
+</ul>
+<div class="mt-auto border-t border-surface-variant/20 pt-4">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                            Settings
+                        </a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-primary-container dark:text-on-tertiary-container px-6 py-3 opacity-70 hover:opacity-100 hover:bg-surface-variant/10 transition-colors rounded-full font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+                            Support
+                        </a>
+</li>
+</ul>
+<div class="mt-6 px-6 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-primary-fixed">Practitioner</p>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<main class="md:ml-[280px] min-h-screen flex flex-col transition-all duration-300">
+<!-- JSON: TopAppBar -->
+<header class="full-width top-0 bg-transparent flex justify-between items-center w-full px-10 py-6 max-w-[calc(100%-280px)] z-40 sticky">
+<div class="flex items-center">
+<!-- Search bar on_left intent -->
+<div class="relative bg-surface-container-lowest rounded-full px-4 py-2 flex items-center gap-2 shadow-[0_8px_30px_rgb(0,0,0,0.04)] w-64 border border-surface-container-highest">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-full placeholder:text-on-surface-variant/60" placeholder="Search..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-all flex items-center justify-center w-10 h-10">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high/50 rounded-full transition-all flex items-center justify-center w-10 h-10">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 px-container-padding pb-section-margin max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="mb-12">
+<h2 class="font-headline-lg text-headline-lg text-on-background mb-4">Book Appointment</h2>
+<!-- Progress Tracker -->
+<div class="flex items-center w-full max-w-3xl mt-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-md text-label-md">1</div>
+<span class="font-label-md text-label-md text-primary">Doctor</span>
+</div>
+<div class="flex-1 h-px bg-primary mx-4"></div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-md text-label-md">2</div>
+<span class="font-label-md text-label-md text-primary">Date &amp; Time</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant mx-4"></div>
+<div class="flex items-center gap-3 opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-md text-label-md">3</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Details</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant mx-4"></div>
+<div class="flex items-center gap-3 opacity-50">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-label-md text-label-md">4</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Confirm</span>
+</div>
+</div>
+</div>
+<!-- 2-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column (8 cols) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Doctor Summary Card -->
+<div class="bg-surface-container-lowest rounded-4xl p-6 shadow-[0_20px_40px_rgb(28,27,27,0.03)] flex items-center gap-6 border border-surface-container-low">
+<div class="w-20 h-20 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-4xl">stethoscope</span>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-on-background">Dr. Sarah Jenkins</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Cardiology Specialist • 15 Yrs Exp.</p>
+<div class="flex gap-2 mt-3">
+<span class="px-3 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-on-surface-variant">Adults</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full font-label-sm text-label-sm text-on-surface-variant">English, Spanish</span>
+</div>
+</div>
+<button class="text-secondary font-label-md text-label-md hover:underline">Change</button>
+</div>
+<!-- Calendar & Time Selection -->
+<div class="bg-surface-container-lowest rounded-4xl p-8 shadow-[0_20px_40px_rgb(28,27,27,0.03)] border border-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Select Date &amp; Time</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- Placeholder Calendar -->
+<div>
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-label-md text-label-md text-on-background">October 2023</h4>
+<div class="flex gap-2">
+<button class="p-1 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="p-1 rounded-full hover:bg-surface-container-high"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-2 text-center mb-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mo</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tu</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">We</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Th</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fr</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sa</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Su</span>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<!-- Empty days -->
+<div></div><div></div>
+<!-- Days -->
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">1</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">2</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">3</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">4</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">5</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">6</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">7</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">8</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">9</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">10</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">11</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md bg-primary text-on-primary shadow-md">12</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">13</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center font-body-md text-body-md hover:bg-surface-container-high text-on-background">14</button>
+</div>
+</div>
+<!-- Time Slots -->
+<div>
+<h4 class="font-label-md text-label-md text-on-background mb-4">Available Times on Oct 12</h4>
+<div class="mb-6">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-xs">light_mode</span> Morning</p>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-body-md text-body-md hover:border-primary hover:text-primary transition-colors">09:00 AM</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-body-md text-body-md hover:border-primary hover:text-primary transition-colors">09:30 AM</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-body-md text-body-md hover:border-primary hover:text-primary transition-colors opacity-50 cursor-not-allowed">10:00 AM</button>
+<button class="px-4 py-2 rounded-full border border-primary bg-primary/5 text-primary font-body-md text-body-md font-medium">10:30 AM</button>
+</div>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-3 flex items-center gap-1"><span class="material-symbols-outlined text-xs">wb_sunny</span> Afternoon</p>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-body-md text-body-md hover:border-primary hover:text-primary transition-colors">01:00 PM</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-body-md text-body-md hover:border-primary hover:text-primary transition-colors">02:30 PM</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant text-on-surface-variant font-body-md text-body-md hover:border-primary hover:text-primary transition-colors">04:00 PM</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Visit Details -->
+<div class="bg-surface-container-lowest rounded-4xl p-8 shadow-[0_20px_40px_rgb(28,27,27,0.03)] border border-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-background mb-6">Visit Details</h3>
+<div class="space-y-6">
+<div>
+<label class="block font-label-md text-label-md text-on-background mb-2">Reason for Visit</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-high border-none rounded-full px-6 py-4 font-body-md text-body-md text-on-background focus:ring-2 focus:ring-primary focus:outline-none">
+<option disabled="" selected="" value="">Select a reason...</option>
+<option value="routine">Routine Checkup</option>
+<option value="followup">Follow-up</option>
+<option value="consultation">Initial Consultation</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-6 text-on-surface-variant">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-background mb-2">Additional Notes (Optional)</label>
+<textarea class="w-full bg-surface-container-high border-none rounded-3xl px-6 py-4 font-body-md text-body-md text-on-background focus:ring-2 focus:ring-primary focus:outline-none resize-none" placeholder="Any specific symptoms or questions?" rows="3"></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (4 cols, Sticky) -->
+<div class="lg:col-span-4">
+<div class="sticky top-32 space-y-6">
+<!-- Summary Card -->
+<div class="bg-surface-container-lowest rounded-4xl p-6 shadow-[0_20px_40px_rgb(28,27,27,0.03)] border border-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-background mb-4">Summary</h3>
+<div class="flex items-start gap-4 mb-6 pb-6 border-b border-surface-container-highest">
+<div class="w-12 h-12 rounded-full bg-secondary-container/50 flex items-center justify-center text-on-secondary-container mt-1">
+<span class="material-symbols-outlined">event</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-background">Oct 12, 2023</p>
+<p class="font-body-md text-body-md text-on-surface-variant">10:30 AM - 11:00 AM</p>
+<p class="font-label-sm text-label-sm text-primary mt-1">Dr. Sarah Jenkins</p>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Consultation Base</span>
+<span>$120.00</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Admin Fee</span>
+<span>$30.00</span>
+</div>
+<div class="flex justify-between font-label-md text-label-md text-on-background pt-3 border-t border-surface-container-highest">
+<span>Total Estimate</span>
+<span>$150.00</span>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary rounded-full py-4 font-label-md text-label-md hover:bg-primary/90 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                Confirm &amp; Book
+                            </button>
+</div>
+<!-- Policies Card -->
+<div class="bg-surface-container-low rounded-3xl p-6">
+<h4 class="font-label-md text-label-md text-on-background mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">info</span>
+                                Booking Policies
+                            </h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm leading-relaxed">
+                                Please cancel or reschedule at least 24 hours in advance to avoid a cancellation fee. Payment is collected at the time of service unless otherwise noted.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

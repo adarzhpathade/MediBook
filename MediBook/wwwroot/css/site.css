@@ -1,0 +1,352 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+:root {
+  /* Colors */
+  --mb-bg: #F9F5EE;
+  --mb-surface: #FFFFFF;
+  --mb-surface-sec: #F7F3EF;
+  --mb-border: #E6DED4;
+  --mb-divider: #ECE7E2;
+
+  --mb-primary: #111111;
+  --mb-primary-hover: #222222;
+  --mb-primary-active: #000000;
+  --mb-on-primary: #FFFFFF;
+
+  --mb-secondary: #F4B7D8;
+  --mb-secondary-hover: #EFA8CF;
+  --mb-on-secondary: #111111;
+
+  /* Typography */
+  --mb-font-family: 'Manrope', sans-serif;
+
+  /* Patient Dashboard Specific Colors */
+  --mb-accent-pink: #F4B7D8;
+  --mb-accent-yellow: #F6D35E;
+  --mb-accent-blue: #BFD4FF;
+  --mb-accent-green: #A8C67D;
+  --mb-primary-container: #1c1b1b;
+  --mb-on-primary-container: #858383;
+  --mb-text-muted: #747878;
+}
+
+/* App Dashboard Utilities */
+.app-layout {
+  background-color: var(--mb-bg);
+  color: var(--mb-primary);
+  min-height: 100vh;
+  display: flex;
+}
+
+.app-main {
+  flex: 1;
+  min-height: 100vh;
+  padding: 20px;
+  padding-bottom: 120px; /* Space for dock */
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .app-main {
+    padding: 40px;
+    padding-bottom: 120px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+/* Top App Navigation */
+.app-top-nav {
+  position: sticky;
+  top: 10px;
+  z-index: 1040;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .app-top-nav {
+    top: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    margin-bottom: 48px;
+  }
+}
+
+.app-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  z-index: 1045;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-dock-item {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--mb-surface);
+  color: var(--mb-text-muted);
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transform-origin: bottom center;
+}
+
+.app-dock-item .material-symbols-outlined {
+  font-size: 24px;
+  transition: all 0.2s ease;
+}
+
+.app-dock-item.active {
+  background-color: var(--mb-primary);
+  color: var(--mb-on-primary);
+}
+
+.app-dock-item.active .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+  color: var(--mb-on-primary);
+}
+
+/* Tooltip */
+.app-dock-item::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -45px;
+  background-color: var(--mb-primary);
+  color: var(--mb-on-primary);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Hover effects (only on devices with pointer/hover support) */
+@media (hover: hover) {
+  .app-dock:hover .app-dock-item {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+
+  .app-dock .app-dock-item:hover {
+    transform: scale(1.4) translateY(-12px);
+    opacity: 1;
+    z-index: 2;
+    box-shadow: 0 16px 32px rgba(0,0,0,0.15);
+    color: var(--mb-primary);
+  }
+
+  .app-dock .app-dock-item.active:hover {
+    color: var(--mb-on-primary);
+  }
+
+  .app-dock .app-dock-item:hover::before {
+    opacity: 1;
+    transform: translateY(0) scale(0.71); /* Cancel parent scale */
+  }
+
+  /* Sibling scaling (macOS effect) */
+  .app-dock .app-dock-item:has(+ .app-dock-item:hover),
+  .app-dock .app-dock-item:hover + .app-dock-item {
+    transform: scale(1.15) translateY(-6px);
+    opacity: 0.95;
+    z-index: 1;
+  }
+}
+
+/* Mobile Responsiveness for App Dock */
+@media (max-width: 768px) {
+  .app-dock {
+    padding: 8px;
+    gap: 4px;
+    bottom: 12px;
+    width: fit-content;
+    max-width: calc(100% - 16px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start;
+    border-radius: 24px;
+  }
+  
+  /* Hide scrollbar for the dock but keep it scrollable */
+  .app-dock::-webkit-scrollbar {
+    display: none;
+  }
+  .app-dock {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .app-dock-item {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .app-dock-item .material-symbols-outlined {
+    font-size: 18px;
+  }
+  
+  .app-dock-item::before {
+    display: none;
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.bento-card {
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
+  transition: transform 0.2s;
+}
+.bento-card:hover {
+  transform: translateY(-4px);
+}
+
+.bento-card.pink { background-color: var(--mb-accent-pink); }
+.bento-card.blue { background-color: var(--mb-accent-blue); }
+.bento-card.green { background-color: var(--mb-accent-green); }
+.bento-card.yellow { background-color: var(--mb-accent-yellow); }
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.icon-fill {
+  font-variation-settings: 'FILL' 1;
+}
+
+body {
+  font-family: var(--mb-font-family);
+  background-color: var(--mb-bg);
+  color: var(--mb-primary);
+  margin-bottom: 60px;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--mb-primary);
+  outline-offset: 2px;
+  transition: outline 0.15s ease-in-out;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Global Top Progress Bar */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  z-index: 9999;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.page-loader.active {
+  opacity: 1;
+}
+
+.loader-bar {
+  height: 100%;
+  width: 0%;
+  background-color: var(--mb-primary);
+  background: linear-gradient(90deg, var(--mb-accent-blue), var(--mb-accent-pink));
+  border-radius: 0 4px 4px 0;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Entrance Animations */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.4s ease-out both;
+}
+
+.fade-up:nth-child(1) { animation-delay: 0s; }
+.fade-up:nth-child(2) { animation-delay: 0.06s; }
+.fade-up:nth-child(3) { animation-delay: 0.12s; }
+.fade-up:nth-child(4) { animation-delay: 0.18s; }
+.fade-up:nth-child(5) { animation-delay: 0.24s; }
+.fade-up:nth-child(6) { animation-delay: 0.30s; }
+
+/* Prevent layout shift from scrollbar */
+html {
+  scrollbar-gutter: stable;
+}
+

@@ -1,0 +1,160 @@
+@model MediBook.Models.ViewModels.GlobalSearchViewModel
+@{
+    ViewData["Title"] = "Global Search";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5 text-center">
+    <h1 class="display-5 fw-bold text-dark mb-1">Global Search</h1>
+    <p class="text-muted mb-0">Search across doctors, patients, and appointments</p>
+</div>
+
+<!-- Search Input -->
+<div class="d-flex justify-content-center mb-5">
+    <div class="bg-white rounded-pill shadow-sm p-2 d-flex align-items-center w-100" style="max-width: 700px;">
+        <form asp-action="GlobalSearch" method="get" class="d-flex w-100 align-items-center m-0" style="min-width: 0;">
+            <span class="material-symbols-outlined text-muted ms-3 flex-shrink-0">search</span>
+            <input type="text" name="query" class="form-control border-0 shadow-none bg-transparent ms-2 fs-5 flex-grow-1" style="min-width: 0;" placeholder="Enter name, email, phone, etc." value="@Model.SearchTerm" autofocus />
+            <button type="submit" class="btn btn-dark rounded-pill fw-bold px-4 ms-2 flex-shrink-0">Search</button>
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <a asp-action="GlobalSearch" class="btn btn-light rounded-pill ms-2 text-muted fw-bold flex-shrink-0">Clear</a>
+            }
+        </form>
+    </div>
+</div>
+
+@if (string.IsNullOrWhiteSpace(Model.SearchTerm))
+{
+    <div class="text-center py-5 text-muted">
+        <span class="material-symbols-outlined display-1 mb-3" style="opacity: 0.1;">travel_explore</span>
+        <h3 class="fs-4 fw-bold text-dark">Ready to Search</h3>
+        <p>Type a keyword above to find exactly what you're looking for.</p>
+    </div>
+}
+else
+{
+    var hasResults = Model.Doctors.Any() || Model.Patients.Any() || Model.Appointments.Any();
+
+    if (!hasResults)
+    {
+        <div class="text-center py-5 text-muted">
+            <span class="material-symbols-outlined display-1 mb-3" style="opacity: 0.2;">search_off</span>
+            <h3 class="fs-5 fw-bold text-dark">No results found for "@Model.SearchTerm"</h3>
+            <p>Try adjusting your search criteria.</p>
+        </div>
+    }
+    else
+    {
+        <!-- Results Grid -->
+        <div class="row g-4">
+            
+            <!-- Doctors Results -->
+            <div class="col-md-4">
+                <div class="bg-white rounded-4 shadow-sm p-4 h-100">
+                    <h5 class="fw-bold mb-4 d-flex align-items-center gap-2 border-bottom pb-2">
+                        <span class="material-symbols-outlined text-primary">stethoscope</span> 
+                        Doctors (@Model.Doctors.Count())
+                    </h5>
+                    
+                    @if (Model.Doctors.Any())
+                    {
+                        <div class="d-flex flex-column gap-3">
+                            @foreach (var doc in Model.Doctors)
+                            {
+                                <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background-color: var(--mb-surface-sec);">
+                                    <div class="flex-grow-1" style="min-width: 0;">
+                                        <div class="fw-bold text-dark text-truncate">@doc.FullName</div>
+                                        <div class="text-muted small">@doc.Specialization</div>
+                                    </div>
+                                    <div class="ms-auto flex-shrink-0">
+                                        <a asp-action="ManageDoctors" asp-route-search="@doc.FullName" class="btn btn-sm btn-light rounded-circle d-flex justify-content-center align-items-center text-dark" style="width: 36px; height: 36px;">
+                                            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic small">No doctors matched.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Patients Results -->
+            <div class="col-md-4">
+                <div class="bg-white rounded-4 shadow-sm p-4 h-100">
+                    <h5 class="fw-bold mb-4 d-flex align-items-center gap-2 border-bottom pb-2">
+                        <span class="material-symbols-outlined" style="color: #4caf50;">person</span> 
+                        Patients (@Model.Patients.Count())
+                    </h5>
+                    
+                    @if (Model.Patients.Any())
+                    {
+                        <div class="d-flex flex-column gap-3">
+                            @foreach (var patient in Model.Patients)
+                            {
+                                <div class="d-flex align-items-center gap-3 p-3 rounded-4" style="background-color: var(--mb-surface-sec);">
+                                    <div class="flex-grow-1" style="min-width: 0;">
+                                        <div class="fw-bold text-dark text-truncate">@patient.FullName</div>
+                                        <div class="text-muted small text-truncate">@patient.Email</div>
+                                    </div>
+                                    <div class="ms-auto flex-shrink-0">
+                                        <a asp-action="ManagePatients" asp-route-search="@patient.FullName" class="btn btn-sm btn-light rounded-circle d-flex justify-content-center align-items-center text-dark" style="width: 36px; height: 36px;">
+                                            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic small">No patients matched.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Appointments Results -->
+            <div class="col-md-4">
+                <div class="bg-white rounded-4 shadow-sm p-4 h-100">
+                    <h5 class="fw-bold mb-4 d-flex align-items-center gap-2 border-bottom pb-2">
+                        <span class="material-symbols-outlined text-info">event</span> 
+                        Appointments (@Model.Appointments.Count())
+                    </h5>
+                    
+                    @if (Model.Appointments.Any())
+                    {
+                        <div class="d-flex flex-column gap-3">
+                            @foreach (var appt in Model.Appointments)
+                            {
+                                <div class="d-flex flex-column gap-2 p-3 rounded-4" style="background-color: var(--mb-surface-sec);">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="fw-bold text-dark">@appt.AppointmentDate.ToString("MMM dd, yyyy")</div>
+                                            <div class="text-muted small">@DateTime.Today.Add(appt.AppointmentTime).ToString("hh:mm tt")</div>
+                                        </div>
+                                        <a asp-action="AppointmentDetails" asp-route-id="@appt.AppointmentId" class="btn btn-sm btn-light rounded-circle d-flex justify-content-center align-items-center text-dark flex-shrink-0" style="width: 36px; height: 36px;">
+                                            <span class="material-symbols-outlined" style="font-size: 18px;">visibility</span>
+                                        </a>
+                                    </div>
+                                    <div class="small">
+                                        <span class="fw-bold text-dark">P:</span> @appt.PatientName<br />
+                                        <span class="fw-bold text-dark">D:</span> @appt.DoctorName
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic small">No appointments matched.</p>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+}

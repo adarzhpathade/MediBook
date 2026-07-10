@@ -1,0 +1,275 @@
+@model MediBook.Models.ViewModels.DoctorDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_AppLayout";
+}
+
+<!-- Welcome Section -->
+<div class="mb-5 d-flex flex-column flex-lg-row justify-content-between align-items-stretch align-items-lg-end gap-4">
+    <div>
+        <h1 class="display-4 fw-bold text-dark mb-2">Good morning, @Model.DoctorName</h1>
+        <p class="fs-5 text-muted mb-0">Here's an overview of your schedule and patients today.</p>
+    </div>
+</div>
+
+<!-- Quick Stats Bento Grid -->
+<div class="row g-4 mb-5">
+    <!-- Stat 1: Pink -->
+    <div class="col-6 col-md-6 col-lg-3">
+        <div class="bento-card pink shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Today's Appointments</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">event</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TodaysAppointmentsCount</div>
+            </div>
+            <div class="position-absolute rounded-circle bg-white" style="width: 120px; height: 120px; right: -30px; bottom: -30px; filter: blur(20px); opacity: 0.4;"></div>
+        </div>
+    </div>
+    <!-- Stat 2: Yellow -->
+    <div class="col-6 col-md-6 col-lg-3">
+        <div class="bento-card yellow shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Pending Requests</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">pending_actions</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.PendingRequestsCount</div>
+            </div>
+            <div class="position-absolute d-flex align-items-end gap-1" style="bottom: 1rem; right: 1rem; height: 3rem; opacity: 0.4;">
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 100%;"></div>
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 75%;"></div>
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 50%;"></div>
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 66%;"></div>
+                <div class="bg-dark rounded-pill" style="width: 8px; height: 33%;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Stat 3: Blue -->
+    <div class="col-6 col-md-6 col-lg-3">
+        <div class="bento-card blue shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Completed</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">check_circle</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.CompletedAppointmentsCount</div>
+            </div>
+            <div class="position-absolute bg-white rounded" style="width: 100px; height: 100px; right: -20px; top: -40px; transform: rotate(45deg); filter: blur(15px); opacity: 0.4;"></div>
+        </div>
+    </div>
+    <!-- Stat 4: Green -->
+    <div class="col-6 col-md-6 col-lg-3">
+        <div class="bento-card green shadow-sm">
+            <div class="d-flex justify-content-between align-items-start position-relative z-1">
+                <span class="fw-bold text-dark" style="opacity: 0.8">Total Patients</span>
+                <span class="material-symbols-outlined fs-2 text-dark" style="opacity: 0.4">group</span>
+            </div>
+            <div class="position-relative z-1 mt-4">
+                <div class="display-5 fw-bold text-dark">@Model.TotalPatientsCount</div>
+            </div>
+            <div class="position-absolute rounded-circle bg-black" style="width: 110px; height: 110px; left: -30px; bottom: -10px; filter: blur(20px); opacity: 0.05;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="row g-4">
+    <!-- Left Column -->
+    <div class="col-lg-7 d-flex flex-column gap-4">
+        
+        <!-- Today's Appointments -->
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0 d-flex flex-column flex-grow-1 position-relative overflow-hidden">
+            <!-- Subtle watermark icon -->
+            <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.02; pointer-events: none;">
+                <span class="material-symbols-outlined" style="font-size: 200px;">stethoscope</span>
+            </div>
+            
+            <div class="position-relative z-1 d-flex flex-column h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Today's Appointments</h3>
+                <a asp-controller="Doctor" asp-action="AllAppointments" class="text-decoration-none small fw-bold d-flex align-items-center" style="color: var(--mb-secondary-hover);">
+                    View all <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+                </a>
+            </div>
+            
+            @if (Model.TodaysAppointments.Any())
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var appt in Model.TodaysAppointments)
+                    {
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded-4" style="background-color: var(--mb-surface-sec);">
+                            <div class="d-flex gap-3 align-items-center">
+                                <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center fw-bold" style="width: 48px; height: 48px; background-color: rgba(191, 212, 255, 0.4); color: var(--mb-primary);">
+                                    @(string.IsNullOrEmpty(appt.PatientName) ? "P" : appt.PatientName.Substring(0, 1).ToUpper())
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">@appt.PatientName</div>
+                                    <div class="small text-muted d-flex align-items-center gap-1">
+                                        <span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                        @appt.AppointmentTime.ToString(@"hh\:mm")
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="badge rounded-pill fw-bold" style="background-color: rgba(246, 211, 94, 0.3); color: var(--mb-primary); padding: 6px 12px;">
+                                    @appt.Status
+                                </span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 250px;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 70px; height: 70px; background-color: rgba(191, 212, 255, 0.2); color: var(--mb-accent-blue);">
+                        <span class="material-symbols-outlined fs-2">free_cancellation</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">No appointments today</h5>
+                    <p class="text-muted small">You have a clear schedule for the day.</p>
+                </div>
+            }
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row g-3">
+            <div class="col-sm-6">
+                <a asp-controller="Doctor" asp-action="AppointmentRequests" class="btn btn-light rounded-4 p-3 d-flex align-items-center gap-3 text-start text-decoration-none shadow-sm h-100" style="border: 1px solid var(--mb-divider); background-color: var(--mb-surface-sec); transition: transform 0.2s;">
+                    <div class="rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px; background-color: rgba(246, 211, 94, 0.2); color: var(--mb-primary);">
+                        <span class="material-symbols-outlined">pending_actions</span>
+                    </div>
+                    <div>
+                        <div class="fw-bold text-dark">Manage Requests</div>
+                        <div class="small text-muted">Review pending</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6">
+                <a asp-controller="Doctor" asp-action="Schedule" class="btn btn-light rounded-4 p-3 d-flex align-items-center gap-3 text-start text-decoration-none shadow-sm h-100" style="border: 1px solid var(--mb-divider); background-color: var(--mb-surface-sec); transition: transform 0.2s;">
+                    <div class="rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 48px; height: 48px; background-color: rgba(168, 198, 125, 0.2); color: var(--mb-primary);">
+                        <span class="material-symbols-outlined">edit_calendar</span>
+                    </div>
+                    <div>
+                        <div class="fw-bold text-dark">Update Schedule</div>
+                        <div class="small text-muted">Set availability</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-lg-5 d-flex flex-column gap-4">
+        
+        <!-- Pending Requests -->
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0 position-relative overflow-hidden">
+            <!-- Subtle watermark icon -->
+            <div class="position-absolute" style="top: -20px; right: -20px; opacity: 0.02; pointer-events: none;">
+                <span class="material-symbols-outlined" style="font-size: 150px;">mark_email_unread</span>
+            </div>
+            
+            <div class="position-relative z-1">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Pending Requests</h3>
+                <a asp-controller="Doctor" asp-action="AppointmentRequests" class="text-decoration-none small fw-bold d-flex align-items-center" style="color: var(--mb-secondary-hover);">
+                    Manage <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+                </a>
+            </div>
+            
+            @if (Model.PendingRequests.Any())
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var req in Model.PendingRequests.Take(3))
+                    {
+                        <div class="p-3 rounded-4" style="border: 1px solid var(--mb-divider);">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="fw-bold text-dark">@req.PatientName</div>
+                                <div class="small text-muted">@req.AppointmentDate.ToString("MMM dd")</div>
+                            </div>
+                            <div class="small text-muted mb-3 d-flex align-items-center gap-1">
+                                <span class="material-symbols-outlined" style="font-size: 14px;">schedule</span>
+                                @req.AppointmentTime.ToString(@"hh\:mm")
+                            </div>
+                            <div class="d-flex gap-2">
+                                <form asp-action="AcceptAppointment" method="post" class="m-0 flex-grow-1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="appointmentId" value="@req.AppointmentId" />
+                                    <button type="submit" class="btn btn-dark btn-sm rounded-pill w-100 fw-bold">Accept</button>
+                                </form>
+                                <form asp-action="DeclineAppointment" method="post" class="m-0 flex-grow-1">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="appointmentId" value="@req.AppointmentId" />
+                                    <button type="submit" class="btn btn-outline-dark btn-sm rounded-pill w-100 fw-bold">Decline</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 250px;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 70px; height: 70px; background-color: rgba(246, 211, 94, 0.2); color: var(--mb-primary);">
+                        <span class="material-symbols-outlined fs-2">inbox</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">All caught up!</h5>
+                    <p class="text-muted small mb-0">No pending appointment requests at the moment.</p>
+                </div>
+            }
+            </div>
+        </div>
+
+        <!-- Upcoming Schedule -->
+        <div class="bg-white rounded-4 p-4 shadow-sm border-0 flex-grow-1 position-relative overflow-hidden">
+            <!-- Subtle watermark icon -->
+            <div class="position-absolute" style="bottom: -20px; right: -20px; opacity: 0.02; pointer-events: none;">
+                <span class="material-symbols-outlined" style="font-size: 150px;">calendar_month</span>
+            </div>
+
+            <div class="position-relative z-1 d-flex flex-column h-100">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fs-5 fw-bold text-dark m-0">Upcoming Schedule</h3>
+                <a asp-controller="Doctor" asp-action="Schedule" class="text-decoration-none small fw-bold d-flex align-items-center" style="color: var(--mb-secondary-hover);">
+                    Calendar <span class="material-symbols-outlined" style="font-size: 16px;">chevron_right</span>
+                </a>
+            </div>
+            
+            @if (Model.UpcomingSchedule.Any())
+            {
+                <ul class="list-unstyled m-0 d-flex flex-column gap-3">
+                    @foreach(var sched in Model.UpcomingSchedule)
+                    {
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex gap-3 align-items-center">
+                                <div class="rounded-3 d-flex flex-column align-items-center justify-content-center fw-bold" style="width: 48px; height: 48px; background-color: rgba(168, 198, 125, 0.2); color: var(--mb-primary);">
+                                    <span class="small" style="line-height: 1;">@sched.AppointmentDate.ToString("dd")</span>
+                                    <span class="small text-muted" style="font-size: 10px;">@sched.AppointmentDate.ToString("MMM")</span>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark">@sched.PatientName</div>
+                                    <div class="small text-muted">@sched.AppointmentTime.ToString(@"hh\:mm")</div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="text-center py-5 d-flex flex-column align-items-center justify-content-center h-100" style="min-height: 250px;">
+                    <div class="d-inline-flex justify-content-center align-items-center rounded-circle mb-3" style="width: 70px; height: 70px; background-color: rgba(168, 198, 125, 0.2); color: var(--mb-accent-green);">
+                        <span class="material-symbols-outlined fs-2">event_busy</span>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">Nothing scheduled</h5>
+                    <p class="text-muted small mb-0">You don't have any upcoming appointments.</p>
+                </div>
+            }
+            </div>
+        </div>
+
+    </div>
+</div>

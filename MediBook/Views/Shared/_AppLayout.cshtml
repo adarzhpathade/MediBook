@@ -1,0 +1,165 @@
+@using MediBook.Helpers
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediBook</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="app-layout m-0">
+
+    <!-- Global Page Loader -->
+    <div id="page-loader" class="page-loader">
+        <div id="loader-bar" class="loader-bar"></div>
+    </div>
+
+
+    <main class="app-main">
+        <!-- Top App Bar -->
+        <header class="app-top-nav d-flex justify-content-between align-items-center w-100 p-2 p-md-3 rounded-pill">
+            <div class="d-flex align-items-center">
+                <!-- Mobile title -->
+                <span class="fs-5 fw-bold text-dark px-2 d-md-none">MediBook</span>
+                <!-- Desktop title -->
+                <span class="fs-4 fw-bold text-dark px-2 me-4 d-none d-md-block">MediBook</span>
+            </div>
+            
+            <div class="d-flex align-items-center">
+                <div class="fw-bold text-dark px-3 py-2 rounded-pill text-truncate" style="background-color: rgba(0,0,0,0.03); max-width: 140px; font-size: 0.95rem;">
+                    @{
+                        var session = HttpContextAccessor.HttpContext?.Session;
+                        var user = session != null ? SessionHelper.GetUserSession(session) : null;
+                        var name = user?.FullName ?? "User";
+                    }
+                    @name
+                </div>
+            </div>
+        </header>
+
+        @RenderBody()
+
+    </main>
+
+    <!-- Apple-style Floating Dock -->
+    <nav class="app-dock" aria-label="Main Navigation">
+        @{
+            var action = ViewContext.RouteData.Values["action"]?.ToString();
+            var currentRole = user?.Role ?? "Patient";
+        }
+        
+        @if (currentRole == "Admin")
+        {
+            <a asp-controller="Admin" asp-action="Dashboard" class="app-dock-item @(action == "Dashboard" ? "active" : "")" aria-label="Dashboard" data-tooltip="Dashboard">
+                <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="ManageDoctors" class="app-dock-item @(action == "ManageDoctors" || action == "AddDoctor" ? "active" : "")" aria-label="Doctors" data-tooltip="Doctors">
+                <span class="material-symbols-outlined" aria-hidden="true">medical_services</span>
+            </a>
+            <a asp-controller="Admin" asp-action="ManagePatients" class="app-dock-item @(action == "ManagePatients" ? "active" : "")" aria-label="Patients" data-tooltip="Patients">
+                <span class="material-symbols-outlined" aria-hidden="true">group</span>
+            </a>
+            <a asp-controller="Admin" asp-action="ManageAppointments" class="app-dock-item @(action == "ManageAppointments" || action == "AppointmentDetails" ? "active" : "")" aria-label="Appointments" data-tooltip="Appointments">
+                <span class="material-symbols-outlined" aria-hidden="true">event</span>
+            </a>
+            <a asp-controller="Admin" asp-action="GlobalSearch" class="app-dock-item @(action == "GlobalSearch" ? "active" : "")" aria-label="Search" data-tooltip="Search">
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Profile" class="app-dock-item @(action == "Profile" || action == "ChangePassword" ? "active" : "")" aria-label="Profile" data-tooltip="Profile">
+                <span class="material-symbols-outlined" aria-hidden="true">person</span>
+            </a>
+        }
+        else if (currentRole == "Doctor")
+        {
+            <a asp-controller="Doctor" asp-action="Dashboard" class="app-dock-item @(action == "Dashboard" ? "active" : "")" aria-label="Dashboard" data-tooltip="Dashboard">
+                <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+            </a>
+            <a asp-controller="Doctor" asp-action="AppointmentRequests" class="app-dock-item @(action == "AppointmentRequests" ? "active" : "")" aria-label="Requests" data-tooltip="Requests">
+                <span class="material-symbols-outlined" aria-hidden="true">pending_actions</span>
+            </a>
+            <a asp-controller="Doctor" asp-action="Schedule" class="app-dock-item @(action == "Schedule" ? "active" : "")" aria-label="Schedule" data-tooltip="Schedule">
+                <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+            </a>
+            <a asp-controller="Doctor" asp-action="AllAppointments" class="app-dock-item @(action == "AllAppointments" ? "active" : "")" aria-label="Appointments" data-tooltip="Appointments">
+                <span class="material-symbols-outlined" aria-hidden="true">format_list_bulleted</span>
+            </a>
+            <a asp-controller="Doctor" asp-action="Profile" class="app-dock-item @(action == "Profile" ? "active" : "")" aria-label="Profile" data-tooltip="Profile">
+                <span class="material-symbols-outlined" aria-hidden="true">person</span>
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Patient" asp-action="Dashboard" class="app-dock-item @(action == "Dashboard" ? "active" : "")" aria-label="Dashboard" data-tooltip="Dashboard">
+                <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
+            </a>
+            <a asp-controller="Patient" asp-action="FindDoctors" class="app-dock-item @(action == "FindDoctors" ? "active" : "")" aria-label="Find Doctors" data-tooltip="Find Doctors">
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+            </a>
+            <a asp-controller="Patient" asp-action="MyAppointments" class="app-dock-item @(action == "MyAppointments" ? "active" : "")" aria-label="My Appointments" data-tooltip="My Appointments">
+                <span class="material-symbols-outlined" aria-hidden="true">calendar_today</span>
+            </a>
+            <a asp-controller="Patient" asp-action="Settings" class="app-dock-item @(action == "Settings" ? "active" : "")" aria-label="Settings" data-tooltip="Settings">
+                <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+            </a>
+        }
+        
+        <!-- Divider -->
+        <div style="width: 2px; height: 32px; background-color: var(--mb-divider); margin: 0 4px; border-radius: 2px;" aria-hidden="true"></div>
+        
+        <a asp-controller="Account" asp-action="Logout" class="app-dock-item" aria-label="Sign Out" data-tooltip="Sign Out" style="color: var(--bs-danger);">
+            <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+        </a>
+    </nav>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                },
+                customClass: {
+                    popup: 'rounded-4 shadow-sm border-0'
+                }
+            });
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                Toast.fire({
+                    icon: 'success',
+                    title: '@Html.Raw(TempData["SuccessMessage"]?.ToString()?.Replace("'", "\\'"))'
+                });
+                </text>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <text>
+                Toast.fire({
+                    icon: 'error',
+                    title: '@Html.Raw(TempData["ErrorMessage"]?.ToString()?.Replace("'", "\\'"))'
+                });
+                </text>
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

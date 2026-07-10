@@ -1,0 +1,92 @@
+@model MediBook.Models.ViewModels.FindDoctorsViewModel
+
+@{
+    ViewData["Title"] = "Find Doctors";
+    Layout = "_AppLayout";
+}
+
+<div class="mb-5">
+    <h2 class="display-5 fw-bold text-dark mb-2">Find Doctors</h2>
+    <p class="fs-5 text-muted mb-0">
+        Search for specialized practitioners and book your consultation instantly.
+    </p>
+</div>
+
+<!-- Search Form -->
+<div class="bg-white rounded-4 p-4 shadow-sm border-0 mb-5">
+    <form asp-action="FindDoctors" method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label fw-bold text-dark mb-2">Doctor Name</label>
+            <input type="text" name="name" value="@Model.SearchName" class="form-control rounded-pill px-4 py-3 bg-light border-0" placeholder="Search by name...">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label fw-bold text-dark mb-2">Specialty</label>
+            <select name="specialty" class="form-select rounded-pill px-4 py-3 bg-light border-0">
+                <option value="">All Specialties</option>
+                <option value="Cardiology" selected="@(Model.SearchSpecialty == "Cardiology")">Cardiology</option>
+                <option value="Neurology" selected="@(Model.SearchSpecialty == "Neurology")">Neurology</option>
+                <option value="Orthopedics" selected="@(Model.SearchSpecialty == "Orthopedics")">Orthopedics</option>
+                <option value="Pediatrics" selected="@(Model.SearchSpecialty == "Pediatrics")">Pediatrics</option>
+                <option value="General Practice" selected="@(Model.SearchSpecialty == "General Practice")">General Practice</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-dark w-100 rounded-pill py-3 fw-bold shadow-sm">
+                Search
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Doctors List -->
+<div class="row g-4">
+    @if (!Model.Doctors.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <div class="rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px; background-color: rgba(191, 212, 255, 0.2); color: var(--mb-accent-blue);">
+                <span class="material-symbols-outlined fs-1">search_off</span>
+            </div>
+            <h3 class="fs-4 fw-bold text-dark mb-2">No doctors found</h3>
+            <p class="text-muted">Try adjusting your search criteria.</p>
+        </div>
+    }
+    else
+    {
+        @foreach(var doc in Model.Doctors)
+        {
+            <div class="col-lg-6">
+                <div class="bg-white rounded-4 p-4 shadow-sm border-0 h-100 d-flex flex-column" onmouseover="this.style.backgroundColor='var(--mb-bg)'" onmouseout="this.style.backgroundColor='transparent'">
+                    <div class="d-flex align-items-start gap-3 mb-4">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 overflow-hidden" style="width: 64px; height: 64px; background-color: rgba(191, 212, 255, 0.2); color: var(--mb-accent-blue);">
+                            @if(!string.IsNullOrEmpty(doc.ProfileImage))
+                            {
+                                <img src="@doc.ProfileImage" alt="@doc.FullName" class="w-100 h-100" style="object-fit: cover;"/>
+                            }
+                            else
+                            {
+                                <span class="material-symbols-outlined fs-2">stethoscope</span>
+                            }
+                        </div>
+                        <div>
+                            <h3 class="fs-5 fw-bold text-dark m-0 mb-1">@doc.FullName</h3>
+                            <p class="text-muted mb-2">@doc.Specialization</p>
+                            <div class="d-flex align-items-center gap-2 small fw-bold text-muted">
+                                <span>@(doc.Experience ?? 0) Yrs Exp.</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="small text-muted m-0">Consultation Fee</p>
+                            <p class="fw-bold text-dark m-0 fs-5">₹@(doc.ConsultationFee?.ToString("0.00") ?? "0.00")</p>
+                        </div>
+                        <a asp-action="BookAppointment" asp-route-id="@doc.DoctorId" class="btn btn-dark rounded-pill fw-bold px-4 py-2 shadow-sm">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
