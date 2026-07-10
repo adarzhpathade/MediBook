@@ -189,34 +189,23 @@ html {
 /* Mobile Responsiveness for App Dock */
 @media (max-width: 768px) {
   .app-dock {
-    padding: 8px;
-    gap: 4px;
-    bottom: 12px;
-    width: fit-content;
-    max-width: calc(100% - 16px);
-    overflow-x: auto;
-    overflow-y: hidden;
-    justify-content: flex-start;
-    border-radius: 24px;
+    padding: 10px 16px;
+    gap: 8px;
+    bottom: 16px;
+    width: auto;
+    max-width: 95%;
+    justify-content: space-evenly;
+    border-radius: 999px;
   }
   
-  /* Hide scrollbar for the dock but keep it scrollable */
-  .app-dock::-webkit-scrollbar {
-    display: none;
-  }
-  .app-dock {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
   .app-dock-item {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
+    width: clamp(36px, 10vw, 48px);
+    height: clamp(36px, 10vw, 48px);
+    flex-shrink: 1;
   }
 
   .app-dock-item .material-symbols-outlined {
-    font-size: 18px;
+    font-size: clamp(18px, 5vw, 22px);
   }
   
   .app-dock-item::before {
