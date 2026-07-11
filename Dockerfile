@@ -30,6 +30,11 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Install missing Kerberos library required by PostgreSQL driver (Npgsql) to silence warnings
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends libgssapi-krb5-2 && rm -rf /var/lib/apt/lists/*
+USER $APP_UID
+
 # Set environment variable to listen on port 8080 (expected by most PaaS)
 ENV ASPNETCORE_URLS=http://+:8080
 
