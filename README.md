@@ -1,3 +1,5 @@
+![MediBook Cover](design/cover.png)
+
 # MediBook – Doctor Appointment Scheduler
 
 ## Overview
