@@ -252,7 +252,6 @@ body {
   font-family: var(--mb-font-family);
   background-color: var(--mb-bg);
   color: var(--mb-primary);
-  margin-bottom: 60px;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -268,10 +267,19 @@ body {
 html {
   position: relative;
   min-height: 100%;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
 }
 
 body {
-  margin-bottom: 60px;
+  margin: 0;
+  padding: 0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -337,5 +345,38 @@ body {
 /* Prevent layout shift from scrollbar */
 html {
   scrollbar-gutter: stable;
+}
+
+/* Custom Input, Select, and Date Styles to match UI */
+.form-select, input[type="date"], input[type="time"], input[type="datetime-local"] {
+  border-radius: 12px;
+  border: 1px solid var(--mb-border);
+  padding: 0.75rem 1rem;
+  background-color: var(--mb-surface);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+.form-select:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="datetime-local"]:focus {
+  border-color: var(--mb-primary);
+  box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.1);
+  outline: none;
+}
+
+.dropdown-menu {
+  border-radius: 16px;
+  border: 1px solid var(--mb-border);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+}
+.dropdown-item {
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: background-color 0.2s ease;
+}
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: var(--mb-surface-sec);
+  color: var(--mb-primary);
 }
 

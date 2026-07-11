@@ -1,26 +1,34 @@
-# Memory — Phase 7 Completion & Production Readiness
+# Memory — Deployment & Post-Launch Fixes
 
-Last updated: 2026-07-10
+Last updated: 2026-07-11
 
 ## What was built
 
-Completed Phase 7 (Features F69-F74). Added accessibility improvements (`aria-label` attributes, semantic tags, `:focus-visible` styles) to `_AppLayout.cshtml` and `site.css`. Added Security Headers middleware and secure cookie configurations to `Program.cs`. Created `appsettings.Production.json` for deployment preparation. Updated `progress_tracker.md` to 100% completion.
+- Connected the project to a GitHub repository (`adarzhpathade/MediBook`) and pushed all code.
+- Reverted the `.NET 8` downgrade back to `.NET 10` to ensure local development compatibility.
+- Fixed a 500 Internal Server Error crashing the app locally.
+- Fixed a CSS bug where the mobile menu bar icons and shadows were cut off on smaller screens.
+- Created a `Dockerfile` and `.dockerignore` to allow 1-click cloud deployment.
+- Updated `README.md` to include deployment instructions, .NET 10 requirements, and default seed credentials.
 
 ## Decisions made
 
-Used standard ASP.NET Core inline middleware to implement HTTP security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy) rather than pulling in external packages. Configured antiforgery and session cookies strictly for production readiness (`SecurePolicy = Always`).
+- **Cookie Security:** Switched `CookieSecurePolicy.Always` to `CookieSecurePolicy.SameAsRequest`. This secures session/antiforgery tokens in production (HTTPS) without crashing local development (HTTP).
+- **Deployment Platform:** Successfully deployed the Docker container to Render. It is live and functioning.
+- **Docker Image:** Specifically added `libgssapi-krb5-2` to the `aspnet:10.0` runtime image to silence a known `Npgsql` Kerberos warning.
 
 ## Problems solved
 
-Identified file lock issues during `dotnet build` caused by the concurrent `dotnet watch run` process, but verified that code changes successfully compiled and hot-reloaded.
+- **File Lock Errors:** Fixed `dotnet watch run` build lock errors (`warning MSB3026`) by forcefully terminating dangling `MediBook.exe` processes (`taskkill`).
+- **Postgres Linux Warnings:** Silenced the `libgssapi_krb5.so.2: cannot open shared object file` warning in cloud logs by installing the library in the Dockerfile.
 
 ## Current state
 
-The project is 100% complete, fully implemented according to the build plan, and ready for release (v1.0.0).
+The application is 100% finished, fully containerized, pushed to GitHub, and successfully deployed to the internet via Render (`medibook-w3uw.onrender.com`). Local development runs flawlessly.
 
 ## Next session starts with
 
-Committing the final code, tagging the release as v1.0.0, pushing to the GitHub repository, and initiating deployment.
+Exploring the live application, confirming there are no real-world deployment bugs, or adding any new post-launch features as requested. (Optional: Add a real application screenshot to the `assets/` folder and link it in the `README.md`).
 
 ## Open questions
 

@@ -53,6 +53,14 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("submit", function (e) {
         startLoader();
     });
+
+    // Intercept normal links
+    document.addEventListener("click", function (e) {
+        const a = e.target.closest('a');
+        if (a && a.href && !a.href.startsWith('javascript:') && !a.href.includes('#') && !a.hasAttribute('data-bs-toggle') && a.target !== '_blank') {
+            startLoader();
+        }
+    });
     
     // Handle back/forward cache
     window.addEventListener("pageshow", function (e) {
