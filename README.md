@@ -25,13 +25,25 @@ The application focuses on providing a clean, secure, responsive, and intuitive 
 - `design/`: UI prototypes and design system reference.
 
 ## Setup Instructions
-1. Ensure you have the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) installed.
+1. Ensure you have the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) installed.
 2. Clone the repository.
 3. Configure the PostgreSQL database connection string in `appsettings.json` or `appsettings.Development.json`.
 4. Open a terminal in the `MediBook` directory.
 5. Run `dotnet restore` to restore dependencies.
 6. Run `dotnet run` (or `dotnet watch run` for hot reload) to start the application.
-7. Access the application in your browser (typically at `http://localhost:5000` or `https://localhost:5001`).
+7. Access the application in your browser (typically at `http://localhost:5250`).
+
+## Docker Deployment (Render, Railway, Koyeb)
+A `Dockerfile` is included in the root directory for 1-click deployments to cloud providers.
+1. Connect your repository to a provider like Render or Koyeb.
+2. Set the Environment Variable: `ConnectionStrings__DefaultConnection` with your database string.
+3. Deploy! (Ensure the exposed port is set to `8080`).
+
+## Default Test Credentials
+Upon first launch, the database is automatically seeded with test accounts:
+- **Admin:** `admin@medibook.com` | `Admin123!`
+- **Doctor:** `dr.amit@medibook.com` | `Doctor123!` (or any seeded doctor email)
+- **Patient:** `rahul@medibook.com` | `Patient123!`
 
 ## Version
 **Current Version:** v1.0.0
