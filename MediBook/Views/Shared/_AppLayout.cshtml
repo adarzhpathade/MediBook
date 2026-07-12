@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body class="app-layout m-0">
@@ -158,6 +160,35 @@
                 });
                 </text>
             }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize TomSelect on all selects
+            document.querySelectorAll('select').forEach(function(el) {
+                var ts = new TomSelect(el, {
+                    controlInput: null, // disables typing/searching to behave more like a standard dropdown
+                    maxOptions: 50,
+                    allowEmptyOption: true // Allows "value=''" options to be selected and displayed as items
+                });
+                
+                // Copy inline styles from original select to ts-control if they exist
+                if (el.hasAttribute('style')) {
+                    var style = el.getAttribute('style');
+                    ts.control.setAttribute('style', style);
+                }
+            });
+
+            // Initialize Flatpickr on all date inputs
+            flatpickr("input[type=date]", {
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                disableMobile: true // Uses flatpickr on mobile too
+            });
+            
+            // Allow clicking the wrapper to open flatpickr (if it has calendar icon)
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

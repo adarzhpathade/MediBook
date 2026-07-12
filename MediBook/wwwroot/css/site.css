@@ -379,4 +379,90 @@ html {
   background-color: var(--mb-surface-sec);
   color: var(--mb-primary);
 }
+
+/* TomSelect Customization to match UI */
+.ts-wrapper {
+  min-width: 150px;
+}
+.ts-wrapper.form-select {
+  padding: 0 !important; /* Remove Bootstrap's form-select padding from wrapper */
+  border: none !important;
+  background-color: transparent !important;
+  background-image: none !important; /* Remove Bootstrap's default arrow from wrapper */
+  box-shadow: none !important;
+  height: auto !important;
+}
+.ts-control {
+  border-radius: 50rem !important;
+  border: 1px solid var(--mb-border) !important;
+  padding: 0.75rem 1rem !important;
+  background-color: var(--mb-surface) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02) !important;
+  font-family: var(--mb-font-family);
+  font-size: 1rem;
+  color: var(--mb-primary);
+  transition: all 0.2s ease;
+  display: flex !important;
+  align-items: center;
+  min-height: 48px;
+}
+.ts-control:after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid var(--mb-primary);
+  border-bottom: 2px solid var(--mb-primary);
+  transform: rotate(45deg);
+  margin-left: auto;
+  margin-right: 8px;
+  margin-top: -4px;
+}
+.ts-control .item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
+}
+.ts-wrapper.focus .ts-control {
+  border-color: var(--mb-primary) !important;
+  box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.1) !important;
+}
+.ts-dropdown {
+  border-radius: 16px !important;
+  border: 1px solid var(--mb-border) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08) !important;
+  padding: 8px !important;
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px);
+  margin-top: 8px !important;
+  font-family: var(--mb-font-family);
+}
+.ts-dropdown .option {
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  transition: background-color 0.2s ease;
+  font-size: 0.95rem;
+}
+.ts-dropdown .option:hover, .ts-dropdown .active {
+  background-color: var(--mb-surface-sec) !important;
+  color: var(--mb-primary) !important;
+}
+
+/* Flatpickr Customization */
+.flatpickr-calendar {
+  border-radius: 16px !important;
+  border: 1px solid var(--mb-border) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08) !important;
+  font-family: var(--mb-font-family) !important;
+  padding: 8px;
+}
+.flatpickr-day {
+  border-radius: 8px !important;
+}
+.flatpickr-day.selected {
+  background: var(--mb-primary) !important;
+  border-color: var(--mb-primary) !important;
+}
+
 

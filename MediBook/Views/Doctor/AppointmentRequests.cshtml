@@ -51,18 +51,20 @@
                             }
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <form asp-action="AcceptAppointment" method="post" class="m-0">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="appointmentId" value="@request.AppointmentId" />
-                            <button type="submit" class="btn btn-dark rounded-pill fw-bold px-4">Accept</button>
-                        </form>
-                        <form asp-action="DeclineAppointment" method="post" class="m-0">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="appointmentId" value="@request.AppointmentId" />
-                            <button type="submit" class="btn btn-outline-dark rounded-pill fw-bold px-4">Decline</button>
-                        </form>
-                        <a asp-action="RescheduleAppointment" asp-route-id="@request.AppointmentId" class="btn btn-light rounded-pill fw-bold px-4" style="background-color: var(--mb-surface-sec);">Reschedule</a>
+                    <div class="d-flex flex-column flex-md-row gap-2 mt-3 mt-md-0">
+                        <div class="d-flex gap-2">
+                            <form asp-action="AcceptAppointment" method="post" class="m-0 flex-fill">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="appointmentId" value="@request.AppointmentId" />
+                                <button type="submit" class="btn btn-dark rounded-pill fw-bold px-4 w-100">Accept</button>
+                            </form>
+                            <form asp-action="DeclineAppointment" method="post" class="m-0 flex-fill">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="appointmentId" value="@request.AppointmentId" />
+                                <button type="submit" class="btn btn-outline-dark rounded-pill fw-bold px-4 w-100">Decline</button>
+                            </form>
+                        </div>
+                        <a asp-action="RescheduleAppointment" asp-route-id="@request.AppointmentId" class="btn btn-light rounded-pill fw-bold px-4 text-center" style="background-color: var(--mb-surface-sec);">Reschedule</a>
                     </div>
                 </div>
             }
