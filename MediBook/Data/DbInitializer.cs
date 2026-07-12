@@ -98,7 +98,7 @@ namespace MediBook.Data
                 await createUsersTableCommand.ExecuteNonQueryAsync();
 
                 // Check if new seed data exists
-                var checkSeededCommand = new NpgsqlCommand("SELECT COUNT(*) FROM Users WHERE Email = 'dr.arjun@medibook.com'", connection, transaction);
+                var checkSeededCommand = new NpgsqlCommand("SELECT COUNT(*) FROM Users WHERE Email = 'admin.root@medibook.com'", connection, transaction);
                 var isSeeded = (long)(await checkSeededCommand.ExecuteScalarAsync() ?? 0) > 0;
 
                 if (!isSeeded)
@@ -107,51 +107,47 @@ namespace MediBook.Data
                     var wipeCommand = new NpgsqlCommand("TRUNCATE TABLE Users CASCADE;", connection, transaction);
                     await wipeCommand.ExecuteNonQueryAsync();
 
+                    var rand = new Random(42); // Deterministic seed
+
                     // Seed Admin
                     string adminHash = MediBook.Helpers.PasswordHasher.HashPassword("Admin123!");
                     var seedAdminCommand = new NpgsqlCommand(@"
                         INSERT INTO Users (FullName, Email, PasswordHash, Role)
-                        VALUES ('System Administrator', 'admin@medibook.com', @Hash, 'Admin')
+                        VALUES ('System Administrator', 'admin.root@medibook.com', @Hash, 'Admin')
                     ", connection, transaction);
                     seedAdminCommand.Parameters.AddWithValue("@Hash", adminHash);
                     await seedAdminCommand.ExecuteNonQueryAsync();
 
-                    var doctorsToSeed = new List<(string Name, string Email, string Spec, string Qual, int Exp, decimal Fee, string Bio)>
-                    {
-                        ("Dr. Rajesh Kumar", "dr.rajesh@medibook.com", "Cardiology", "MBBS, MD, DM", 20, 800.00m, "Senior Cardiologist with extensive experience in interventional cardiology."),
-                        ("Dr. Priya Sharma", "dr.priya@medibook.com", "Dermatology", "MBBS, MD", 12, 600.00m, "Expert in clinical dermatology and aesthetic procedures."),
-                        ("Dr. Amit Patel", "dr.amit@medibook.com", "Neurology", "MBBS, MD, DM", 15, 1000.00m, "Board-certified neurologist with extensive experience in treating complex neurological disorders."),
-                        ("Dr. Sneha Desai", "dr.sneha@medibook.com", "Pediatrics", "MBBS, MD", 10, 500.00m, "Compassionate pediatrician dedicated to the health and well-being of infants, children, and adolescents."),
-                        ("Dr. Arjun Reddy", "dr.arjun@medibook.com", "Orthopedics", "MBBS, MS", 18, 900.00m, "Specialist in joint replacement and sports injuries."),
-                        ("Dr. Kavita Iyer", "dr.kavita@medibook.com", "Gynecology", "MBBS, MD, DGO", 22, 700.00m, "Dedicated gynecologist with expertise in high-risk pregnancies."),
-                        ("Dr. Vikram Singh", "dr.vikram@medibook.com", "Oncology", "MBBS, MD, DM", 14, 1200.00m, "Leading oncologist focused on targeted therapies and immunotherapy."),
-                        ("Dr. Neha Verma", "dr.neha@medibook.com", "Psychiatry", "MBBS, MD", 11, 800.00m, "Experienced psychiatrist specializing in cognitive behavioral therapy."),
-                        ("Dr. Siddharth Rao", "dr.siddharth@medibook.com", "Ophthalmology", "MBBS, MS, DO", 16, 650.00m, "Expert in cataract surgery and laser vision correction."),
-                        ("Dr. Anjali Joshi", "dr.anjali@medibook.com", "Endocrinology", "MBBS, MD, DM", 13, 900.00m, "Specializes in diabetes management and thyroid disorders."),
-                        ("Dr. Manish Tiwari", "dr.manish@medibook.com", "Gastroenterology", "MBBS, MD, DM", 19, 1000.00m, "Advanced therapeutic endoscopy and hepatology expert."),
-                        ("Dr. Pooja Agarwal", "dr.pooja@medibook.com", "ENT", "MBBS, MS", 9, 600.00m, "Otolaryngologist skilled in sinus surgeries and pediatric ENT."),
-                        ("Dr. Deepak Kumar", "dr.deepak@medibook.com", "Pulmonology", "MBBS, MD", 17, 850.00m, "Focuses on asthma, COPD, and sleep apnea treatments."),
-                        ("Dr. Ritu Kapoor", "dr.ritu@medibook.com", "Rheumatology", "MBBS, MD, DM", 12, 1100.00m, "Expertise in treating autoimmune conditions and arthritis."),
-                        ("Dr. Sanjay Gupta", "dr.sanjay@medibook.com", "Urology", "MBBS, MS, MCh", 21, 1000.00m, "Specializes in minimally invasive urologic surgeries."),
-                        ("Dr. Meera Reddy", "dr.meera@medibook.com", "Nephrology", "MBBS, MD, DM", 15, 950.00m, "Dedicated to advanced kidney disease management and dialysis."),
-                        ("Dr. Karan Malhotra", "dr.karan@medibook.com", "Plastic Surgery", "MBBS, MS, MCh", 14, 1500.00m, "Renowned cosmetic and reconstructive surgeon."),
-                        ("Dr. Swati Nair", "dr.swati@medibook.com", "Dentistry", "BDS, MDS", 8, 400.00m, "Expert in aesthetic dentistry and root canal treatments."),
-                        ("Dr. Anil Choudhury", "dr.anil@medibook.com", "General Surgery", "MBBS, MS", 25, 800.00m, "Veteran surgeon with decades of experience in trauma care."),
-                        ("Dr. Divya Pillai", "dr.divya@medibook.com", "Family Medicine", "MBBS, DNB", 10, 500.00m, "Comprehensive healthcare provider for families and communities.")
-                    };
-
+                    // --- GENERATE DOCTORS ---
                     string doctorHash = MediBook.Helpers.PasswordHasher.HashPassword("Doctor123!");
                     var doctorIds = new List<int>();
 
-                    foreach (var doc in doctorsToSeed)
+                    string[] firstNamesM = { "Rajesh", "Amit", "Vikram", "Siddharth", "Manish", "Deepak", "Sanjay", "Karan", "Anil", "Rahul", "Aarav", "Vihaan", "Aditya", "Sai", "Arjun", "Ravi", "Suresh", "Vishal", "Ashok", "Vijay", "Rohit", "Sameer", "Gaurav" };
+                    string[] firstNamesF = { "Priya", "Sneha", "Kavita", "Neha", "Anjali", "Pooja", "Ritu", "Meera", "Swati", "Divya", "Anaya", "Diya", "Kavya", "Isha", "Riya", "Aarti", "Kiran", "Nisha", "Shalini", "Sunita", "Shruti", "Sonal", "Radhika" };
+                    string[] lastNames = { "Patel", "Sharma", "Kumar", "Singh", "Reddy", "Rao", "Iyer", "Joshi", "Verma", "Agarwal", "Tiwari", "Kapoor", "Gupta", "Malhotra", "Nair", "Choudhury", "Pillai", "Das", "Bose", "Ghosh", "Desai", "Jain", "Bhat", "Menon", "Bansal", "Mehta", "Shah", "Sinha" };
+                    string[] specialties = { "Cardiology", "Dermatology", "Neurology", "Pediatrics", "Orthopedics", "Gynecology", "Oncology", "Psychiatry", "Ophthalmology", "Endocrinology", "Gastroenterology", "ENT", "Pulmonology", "Rheumatology", "Urology", "Nephrology", "Plastic Surgery", "Dentistry", "General Surgery", "Family Medicine", "Ayurveda", "Homeopathy" };
+                    string[] qualifications = { "MBBS, MD", "MBBS, MS", "MBBS, MD, DM", "MBBS, MS, MCh", "BDS, MDS", "BAMS, MD", "BHMS, MD", "MBBS, DNB" };
+
+                    for (int i = 0; i < 50; i++)
                     {
+                        bool isMale = rand.Next(2) == 0;
+                        string firstName = isMale ? firstNamesM[rand.Next(firstNamesM.Length)] : firstNamesF[rand.Next(firstNamesF.Length)];
+                        string lastName = lastNames[rand.Next(lastNames.Length)];
+                        string name = $"Dr. {firstName} {lastName}";
+                        string email = $"dr.{firstName.ToLower()}.{lastName.ToLower()}{i}@medibook.com";
+                        string spec = specialties[rand.Next(specialties.Length)];
+                        string qual = qualifications[rand.Next(qualifications.Length)];
+                        int exp = rand.Next(5, 35);
+                        decimal fee = rand.Next(4, 21) * 100.00m;
+                        string bio = $"Experienced {spec} specialist with {exp} years of practice. Dedicated to providing compassionate and comprehensive care.";
+
                         var seedDoctorCommand = new NpgsqlCommand(@"
                             INSERT INTO Users (FullName, Email, PasswordHash, Role)
                             VALUES (@Name, @Email, @Hash, 'Doctor')
                             RETURNING UserId;
                         ", connection, transaction);
-                        seedDoctorCommand.Parameters.AddWithValue("@Name", doc.Name);
-                        seedDoctorCommand.Parameters.AddWithValue("@Email", doc.Email);
+                        seedDoctorCommand.Parameters.AddWithValue("@Name", name);
+                        seedDoctorCommand.Parameters.AddWithValue("@Email", email);
                         seedDoctorCommand.Parameters.AddWithValue("@Hash", doctorHash);
                         
                         var doctorUserId = Convert.ToInt32(await seedDoctorCommand.ExecuteScalarAsync());
@@ -162,11 +158,11 @@ namespace MediBook.Data
                             RETURNING DoctorId;
                         ", connection, transaction);
                         seedDoctorProfile.Parameters.AddWithValue("@UserId", doctorUserId);
-                        seedDoctorProfile.Parameters.AddWithValue("@Spec", doc.Spec);
-                        seedDoctorProfile.Parameters.AddWithValue("@Qual", doc.Qual);
-                        seedDoctorProfile.Parameters.AddWithValue("@Exp", doc.Exp);
-                        seedDoctorProfile.Parameters.AddWithValue("@Fee", doc.Fee);
-                        seedDoctorProfile.Parameters.AddWithValue("@Bio", doc.Bio);
+                        seedDoctorProfile.Parameters.AddWithValue("@Spec", spec);
+                        seedDoctorProfile.Parameters.AddWithValue("@Qual", qual);
+                        seedDoctorProfile.Parameters.AddWithValue("@Exp", exp);
+                        seedDoctorProfile.Parameters.AddWithValue("@Fee", fee);
+                        seedDoctorProfile.Parameters.AddWithValue("@Bio", bio);
                         
                         var newDoctorId = Convert.ToInt32(await seedDoctorProfile.ExecuteScalarAsync());
                         doctorIds.Add(newDoctorId);
@@ -185,78 +181,78 @@ namespace MediBook.Data
                         await seedDoctorAvailability.ExecuteNonQueryAsync();
                     }
 
-                    var patientsToSeed = new List<(string Name, string Email, string Phone, string Gender)>
-                    {
-                        ("Rahul Gupta", "rahul@medibook.com", "+91 9876543210", "Male"),
-                        ("Anjali Desai", "anjali@medibook.com", "+91 8765432109", "Female"),
-                        ("Vikram Singh", "vikram@medibook.com", "+91 7654321098", "Male"),
-                        ("Neha Verma", "neha@medibook.com", "+91 6543210987", "Female")
-                    };
-
+                    // --- GENERATE PATIENTS ---
                     string patientHash = MediBook.Helpers.PasswordHasher.HashPassword("Patient123!");
                     var patientIds = new List<int>();
-
-                    foreach (var pat in patientsToSeed)
+                    
+                    for (int i = 0; i < 500; i++)
                     {
+                        bool isMale = rand.Next(2) == 0;
+                        string firstName = isMale ? firstNamesM[rand.Next(firstNamesM.Length)] : firstNamesF[rand.Next(firstNamesF.Length)];
+                        string lastName = lastNames[rand.Next(lastNames.Length)];
+                        string name = $"{firstName} {lastName}";
+                        string email = $"{firstName.ToLower()}.{lastName.ToLower()}{i}@example.com";
+                        string phone = $"+91 9{rand.Next(10000000, 99999999)}{rand.Next(0, 9)}";
+                        string gender = isMale ? "Male" : "Female";
+                        DateTime dob = new DateTime(1950, 1, 1).AddDays(rand.Next((new DateTime(2015, 1, 1) - new DateTime(1950, 1, 1)).Days));
+
                         var seedPatientCommand = new NpgsqlCommand(@"
                             INSERT INTO Users (FullName, Email, PasswordHash, Role)
                             VALUES (@Name, @Email, @Hash, 'Patient')
                             RETURNING UserId;
                         ", connection, transaction);
-                        seedPatientCommand.Parameters.AddWithValue("@Name", pat.Name);
-                        seedPatientCommand.Parameters.AddWithValue("@Email", pat.Email);
+                        seedPatientCommand.Parameters.AddWithValue("@Name", name);
+                        seedPatientCommand.Parameters.AddWithValue("@Email", email);
                         seedPatientCommand.Parameters.AddWithValue("@Hash", patientHash);
                         
                         var newUserId = Convert.ToInt32(await seedPatientCommand.ExecuteScalarAsync());
 
                         var seedPatientProfile = new NpgsqlCommand(@"
                             INSERT INTO Patients (UserId, Phone, Gender, DateOfBirth)
-                            VALUES (@UserId, @Phone, @Gender, '1985-06-15')
+                            VALUES (@UserId, @Phone, @Gender, @Dob)
                             RETURNING PatientId;
                         ", connection, transaction);
                         seedPatientProfile.Parameters.AddWithValue("@UserId", newUserId);
-                        seedPatientProfile.Parameters.AddWithValue("@Phone", pat.Phone);
-                        seedPatientProfile.Parameters.AddWithValue("@Gender", pat.Gender);
+                        seedPatientProfile.Parameters.AddWithValue("@Phone", phone);
+                        seedPatientProfile.Parameters.AddWithValue("@Gender", gender);
+                        seedPatientProfile.Parameters.AddWithValue("@Dob", dob);
                         
                         var newPatientId = Convert.ToInt32(await seedPatientProfile.ExecuteScalarAsync());
                         patientIds.Add(newPatientId);
                     }
 
-                    // Seed Appointments
-                    var appointmentsToSeed = new List<(int PatIndex, int DocIndex, DateTime Date, TimeSpan Time, string Reason, string Status)>
+                    // --- GENERATE APPOINTMENTS ---
+                    string[] reasons = { "Routine checkup", "Fever and cough", "Stomach pain", "Headache", "Follow-up consultation", "Skin rash", "Joint pain", "Blood pressure check", "Diabetes management", "Child vaccination", "Allergy symptoms", "General fatigue", "Back pain", "Vision problems", "Dental checkup" };
+                    
+                    for (int i = 0; i < 2000; i++)
                     {
-                        // Past
-                        (0, 0, DateTime.Today.AddDays(-14), new TimeSpan(10, 0, 0), "Routine heart checkup", "Completed"),
-                        (1, 1, DateTime.Today.AddDays(-10), new TimeSpan(11, 30, 0), "Acne consultation", "Completed"),
-                        (2, 2, DateTime.Today.AddDays(-5), new TimeSpan(14, 0, 0), "Migraine follow-up", "Completed"),
-                        (3, 3, DateTime.Today.AddDays(-2), new TimeSpan(9, 30, 0), "Child vaccination", "Cancelled"),
+                        int pId = patientIds[rand.Next(patientIds.Count)];
+                        int dId = doctorIds[rand.Next(doctorIds.Count)];
                         
-                        // Today
-                        (0, 1, DateTime.Today, new TimeSpan(10, 0, 0), "Skin rash check", "Confirmed"),
-                        (1, 2, DateTime.Today, new TimeSpan(13, 0, 0), "Nerve pain assessment", "Confirmed"),
-                        
-                        // Future Confirmed
-                        (2, 0, DateTime.Today.AddDays(2), new TimeSpan(15, 0, 0), "Blood pressure monitoring", "Confirmed"),
-                        (3, 1, DateTime.Today.AddDays(4), new TimeSpan(10, 30, 0), "Eczema treatment", "Confirmed"),
-                        (0, 2, DateTime.Today.AddDays(7), new TimeSpan(11, 0, 0), "Headache consultation", "Confirmed"),
-                        
-                        // Future Pending
-                        (1, 0, DateTime.Today.AddDays(5), new TimeSpan(14, 30, 0), "Cholesterol review", "Pending"),
-                        (2, 3, DateTime.Today.AddDays(10), new TimeSpan(16, 0, 0), "Child fever", "Pending")
-                    };
+                        DateTime apptDate = DateTime.Today.AddDays(rand.Next(-60, 31));
+                        int hours = rand.Next(9, 17);
+                        int mins = (rand.Next(2) == 0) ? 0 : 30;
+                        TimeSpan apptTime = new TimeSpan(hours, mins, 0);
+                        string reason = reasons[rand.Next(reasons.Length)];
+                        string status = "";
 
-                    foreach (var appt in appointmentsToSeed)
-                    {
+                        if (apptDate < DateTime.Today)
+                            status = (rand.Next(10) < 8) ? "Completed" : "Cancelled";
+                        else if (apptDate == DateTime.Today)
+                            status = (rand.Next(10) < 6) ? "Confirmed" : ((rand.Next(10) < 3) ? "Pending" : "Completed");
+                        else
+                            status = (rand.Next(10) < 7) ? "Confirmed" : "Pending";
+
                         var seedApptCommand = new NpgsqlCommand(@"
                             INSERT INTO Appointments (PatientId, DoctorId, AppointmentDate, AppointmentTime, Reason, Status)
                             VALUES (@PatientId, @DoctorId, @Date, @Time, @Reason, @Status)
                         ", connection, transaction);
-                        seedApptCommand.Parameters.AddWithValue("@PatientId", patientIds[appt.PatIndex]);
-                        seedApptCommand.Parameters.AddWithValue("@DoctorId", doctorIds[appt.DocIndex]);
-                        seedApptCommand.Parameters.AddWithValue("@Date", appt.Date);
-                        seedApptCommand.Parameters.AddWithValue("@Time", appt.Time);
-                        seedApptCommand.Parameters.AddWithValue("@Reason", appt.Reason);
-                        seedApptCommand.Parameters.AddWithValue("@Status", appt.Status);
+                        seedApptCommand.Parameters.AddWithValue("@PatientId", pId);
+                        seedApptCommand.Parameters.AddWithValue("@DoctorId", dId);
+                        seedApptCommand.Parameters.AddWithValue("@Date", apptDate);
+                        seedApptCommand.Parameters.AddWithValue("@Time", apptTime);
+                        seedApptCommand.Parameters.AddWithValue("@Reason", reason);
+                        seedApptCommand.Parameters.AddWithValue("@Status", status);
                         await seedApptCommand.ExecuteNonQueryAsync();
                     }
                 }
