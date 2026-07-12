@@ -1,34 +1,32 @@
-# Memory — Deployment & Post-Launch Fixes
+# Memory — UI Polish & Massive Data Seeding
 
-Last updated: 2026-07-11
+Last updated: 2026-07-12
 
 ## What was built
 
-- Connected the project to a GitHub repository (`adarzhpathade/MediBook`) and pushed all code.
-- Reverted the `.NET 8` downgrade back to `.NET 10` to ensure local development compatibility.
-- Fixed a 500 Internal Server Error crashing the app locally.
-- Fixed a CSS bug where the mobile menu bar icons and shadows were cut off on smaller screens.
-- Created a `Dockerfile` and `.dockerignore` to allow 1-click cloud deployment.
-- Updated `README.md` to include deployment instructions, .NET 10 requirements, and default seed credentials.
+- Replaced default OS dropdowns and date pickers across the app with `TomSelect` and `Flatpickr` for a premium, custom-styled UI experience.
+- Refactored TomSelect integration in `_AppLayout.cshtml` to dynamically inherit inline styles (like `min-width` and `background-color`) from the original `<select>` tag.
+- Re-wrote the database seeding logic in `DbInitializer.cs` to algorithmically generate a massive volume of authentic Indian context data (50 doctors, 500 patients, 2000 appointments).
+- Pushed changes to GitHub, triggering an automatic live deployment on Render.
 
 ## Decisions made
 
-- **Cookie Security:** Switched `CookieSecurePolicy.Always` to `CookieSecurePolicy.SameAsRequest`. This secures session/antiforgery tokens in production (HTTPS) without crashing local development (HTTP).
-- **Deployment Platform:** Successfully deployed the Docker container to Render. It is live and functioning.
-- **Docker Image:** Specifically added `libgssapi-krb5-2` to the `aspnet:10.0` runtime image to silence a known `Npgsql` Kerberos warning.
+- **Dropdown Library**: Chose TomSelect over native selects to allow complete CSS control and styling parity with the app's premium aesthetic. Disabled the typing input (`controlInput: null`) to simulate standard dropdown behavior.
+- **Database Wipe**: Decided to intentionally change the seed trigger email to `admin.root@medibook.com` to force a complete cascading wipe of the database (via `TRUNCATE TABLE Users CASCADE`) on the next deployment/run, ensuring the new massive dataset replaces the old static one cleanly.
 
 ## Problems solved
 
-- **File Lock Errors:** Fixed `dotnet watch run` build lock errors (`warning MSB3026`) by forcefully terminating dangling `MediBook.exe` processes (`taskkill`).
-- **Postgres Linux Warnings:** Silenced the `libgssapi_krb5.so.2: cannot open shared object file` warning in cloud logs by installing the library in the Dockerfile.
+- **TomSelect Shrinking Bug**: Fixed an issue where dropdowns with empty `value=""` options (like "All Statuses") collapsed into a tiny circle. Solved by enabling `allowEmptyOption: true` in the TomSelect config.
+- **TomSelect CSS Conflict**: Fixed a conflict where Bootstrap's `.form-select` added extreme padding to TomSelect's `.ts-wrapper`, hiding the text.
+- **Mobile Button Overflow**: Fixed an issue in `AppointmentRequests.cshtml` where action buttons (Accept, Decline, Reschedule) overflowed off-screen on mobile. Solved by switching to a robust native responsive flex layout (`flex-column flex-md-row`) instead of relying on non-existent Bootstrap classes (`w-md-auto`).
 
 ## Current state
 
-The application is 100% finished, fully containerized, pushed to GitHub, and successfully deployed to the internet via Render (`medibook-w3uw.onrender.com`). Local development runs flawlessly.
+The UI is highly polished with custom dropdowns and date pickers that perfectly match the application's premium aesthetic. The database has been completely wiped and re-populated with thousands of realistic records, giving the application a deeply populated, "lived-in" feel. The code is pushed and live on Render.
 
 ## Next session starts with
 
-Exploring the live application, confirming there are no real-world deployment bugs, or adding any new post-launch features as requested. (Optional: Add a real application screenshot to the `assets/` folder and link it in the `README.md`).
+Reviewing the populated data on the live app, testing performance with the massive new dataset, or addressing any new feature requests/bugs. 
 
 ## Open questions
 
