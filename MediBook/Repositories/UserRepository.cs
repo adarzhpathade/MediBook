@@ -40,23 +40,30 @@ namespace MediBook.Repositories
             return null;
         }
 
-        public async Task<int> CreateUserAsync(User user)
+        public async Task<int> CreateUserAsync(User user, Npgsql.NpgsqlTransaction? transaction = null)
         {
-            using var connection = _connectionFactory.CreateNpgsqlConnection();
-            await connection.OpenAsync();
+            var connection = transaction?.Connection ?? _connectionFactory.CreateNpgsqlConnection();
+            if (transaction == null) await connection.OpenAsync();
 
-            using var command = new NpgsqlCommand(@"
-                INSERT INTO Users (FullName, Email, PasswordHash, Role)
-                VALUES (@FullName, @Email, @PasswordHash, @Role)
-                RETURNING UserId;", connection);
-            
-            command.Parameters.AddWithValue("@FullName", user.FullName);
-            command.Parameters.AddWithValue("@Email", user.Email);
-            command.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
-            command.Parameters.AddWithValue("@Role", user.Role);
+            try
+            {
+                using var command = new NpgsqlCommand(@"
+                    INSERT INTO Users (FullName, Email, PasswordHash, Role)
+                    VALUES (@FullName, @Email, @PasswordHash, @Role)
+                    RETURNING UserId;", connection, transaction);
+                
+                command.Parameters.AddWithValue("@FullName", user.FullName);
+                command.Parameters.AddWithValue("@Email", user.Email);
+                command.Parameters.AddWithValue("@PasswordHash", user.PasswordHash);
+                command.Parameters.AddWithValue("@Role", user.Role);
 
-            var id = await command.ExecuteScalarAsync();
-            return Convert.ToInt32(id);
+                var id = await command.ExecuteScalarAsync();
+                return Convert.ToInt32(id);
+            }
+            finally
+            {
+                if (transaction == null) await connection.DisposeAsync();
+            }
         }
 
         public async Task<User?> GetUserByIdAsync(int userId)

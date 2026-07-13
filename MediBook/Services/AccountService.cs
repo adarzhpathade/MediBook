@@ -13,11 +13,13 @@ namespace MediBook.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPatientRepository _patientRepository;
+        private readonly MediBook.Data.DbConnectionFactory _connectionFactory;
 
-        public AccountService(IUserRepository userRepository, IPatientRepository patientRepository)
+        public AccountService(IUserRepository userRepository, IPatientRepository patientRepository, MediBook.Data.DbConnectionFactory connectionFactory)
         {
             _userRepository = userRepository;
             _patientRepository = patientRepository;
+            _connectionFactory = connectionFactory;
         }
 
         public async Task<(bool Success, string ErrorMessage)> RegisterUserAsync(RegisterViewModel model)
@@ -44,26 +46,34 @@ namespace MediBook.Services
                     CreatedAt = DateTime.UtcNow
                 };
 
-                // Use TransactionScope to ensure both User and Patient are created together
-                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                using var connection = _connectionFactory.CreateNpgsqlConnection();
+                await connection.OpenAsync();
+                using var transaction = await connection.BeginTransactionAsync();
+
+                try
                 {
-                    var userId = await _userRepository.CreateUserAsync(user);
+                    var userId = await _userRepository.CreateUserAsync(user, transaction);
 
                     var patient = new Patient
                     {
                         UserId = userId
                     };
-                    await _patientRepository.CreatePatientAsync(patient);
+                    await _patientRepository.CreatePatientAsync(patient, transaction);
 
-                    scope.Complete();
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
                 }
 
                 return (true, string.Empty);
             }
-            catch
+            catch (Exception ex)
             {
                 // Log exception (not implemented yet)
-                return (false, "An error occurred while creating your account. Please try again later.");
+                return (false, "An error occurred while creating your account: " + ex.Message);
             }
         }
 

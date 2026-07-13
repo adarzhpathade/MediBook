@@ -16,20 +16,27 @@ namespace MediBook.Repositories
             _connectionFactory = connectionFactory;
         }
 
-        public async Task<int> CreatePatientAsync(Patient patient)
+        public async Task<int> CreatePatientAsync(Patient patient, Npgsql.NpgsqlTransaction? transaction = null)
         {
-            using var connection = _connectionFactory.CreateNpgsqlConnection();
-            await connection.OpenAsync();
+            var connection = transaction?.Connection ?? _connectionFactory.CreateNpgsqlConnection();
+            if (transaction == null) await connection.OpenAsync();
 
-            using var command = new NpgsqlCommand(@"
-                INSERT INTO Patients (UserId)
-                VALUES (@UserId)
-                RETURNING PatientId;", connection);
-            
-            command.Parameters.AddWithValue("@UserId", patient.UserId);
+            try
+            {
+                using var command = new NpgsqlCommand(@"
+                    INSERT INTO Patients (UserId)
+                    VALUES (@UserId)
+                    RETURNING PatientId;", connection, transaction);
+                
+                command.Parameters.AddWithValue("@UserId", patient.UserId);
 
-            var newPatientId = await command.ExecuteScalarAsync();
-            return Convert.ToInt32(newPatientId);
+                var newPatientId = await command.ExecuteScalarAsync();
+                return Convert.ToInt32(newPatientId);
+            }
+            finally
+            {
+                if (transaction == null) await connection.DisposeAsync();
+            }
         }
 
         public async Task<PatientProfileDto?> GetPatientProfileByUserIdAsync(int userId)

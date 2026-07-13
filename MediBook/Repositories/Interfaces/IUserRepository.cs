@@ -6,7 +6,7 @@ namespace MediBook.Repositories.Interfaces
     public interface IUserRepository
     {
         Task<User?> GetUserByEmailAsync(string email);
-        Task<int> CreateUserAsync(User user);
+        Task<int> CreateUserAsync(User user, Npgsql.NpgsqlTransaction? transaction = null);
         Task<User?> GetUserByIdAsync(int userId);
         Task<bool> UpdateUserPasswordAsync(int userId, string passwordHash);
         Task<bool> UpdateUserAsync(User user);
